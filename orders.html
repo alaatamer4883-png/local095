@@ -1,0 +1,1180 @@
+<!DOCTYPE html>
+<html dir="rtl" lang="ar">
+<head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+  <title>صفحة الطلبات وتتبع الشحنات | سيلين للأزياء</title>
+  
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@300;400;500;600;700&family=Tajawal:wght@300;400;500;700&display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/>
+  
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            "surface": "#FAF9F6",
+            "surface-dim": "#EAE5DF",
+            "surface-container": "#F4F0EB",
+            "surface-container-low": "#F6F3EE",
+            "surface-container-high": "#EAE7E7",
+            "surface-container-lowest": "#FFFFFF",
+            "on-surface": "#1A1A1A",
+            "on-surface-variant": "#5E584F",
+            "outline": "#807666",
+            "outline-variant": "#E5DFD7",
+            "primary": "#B38938",
+            "primary-container": "#956E1F",
+            "primary-fixed": "#FFDEA8",
+            "on-primary": "#FFFFFF",
+            "secondary-container": "#EAE5DF",
+            "error": "#BA1A1A",
+            "success": "#2E7D32"
+          },
+          fontFamily: {
+            sans: ["'IBM Plex Sans Arabic'", "'Tajawal'", "sans-serif"],
+            serif: ["'Tajawal'", "serif"]
+          }
+        }
+      }
+    }
+  </script>
+  
+  <!-- Custom CSS -->
+  <link rel="stylesheet" href="css/style.css"/>
+  <style>
+    @media print {
+      body * {
+        visibility: hidden;
+      }
+      #printable-invoice-container, #printable-invoice-container * {
+        visibility: visible;
+      }
+      #printable-invoice-container {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100%;
+        margin: 0;
+        padding: 20px;
+        background: white !important;
+        color: black !important;
+      }
+      .no-print {
+        display: none !important;
+      }
+    }
+  </style>
+</head>
+<body class="bg-surface text-on-surface font-sans selection:bg-primary-fixed selection:text-on-surface min-h-screen flex flex-col">
+
+  <!-- 1. Top Announcement Bar -->
+  <div class="bg-on-surface text-surface py-2 px-4 text-center text-xs font-medium tracking-wide border-b border-outline/20 no-print">
+    <div class="max-w-7xl mx-auto flex items-center justify-center gap-2">
+      <span class="material-symbols-outlined text-sm text-primary">local_shipping</span>
+      <span>توصيل سريع ومتابعة للطلب حتى يصلكِ | استبدال واسترجاع بسهولة خلال ١٤ يوماً</span>
+    </div>
+  </div>
+
+  <!-- 2. Navigation Header -->
+  <header class="sticky top-0 z-40 w-full glass-nav shadow-sm transition-all duration-300 no-print">
+    <div class="max-w-7xl mx-auto h-20 px-4 sm:px-6 lg:px-8 flex items-center justify-between">
+      
+      <!-- Brand Logo on the Right in RTL -->
+      <div class="flex items-center gap-3">
+        <a href="index.html" class="flex flex-col text-right">
+          <span class="font-serif text-2xl sm:text-3xl tracking-tight text-primary font-bold">سيلين للأزياء</span>
+          <span class="text-[10px] tracking-widest text-outline -mt-1 font-sans">CELINE COUTURE</span>
+        </a>
+      </div>
+
+      <!-- Center Navigation Links -->
+      <nav class="hidden lg:flex items-center gap-1.5 font-medium text-sm">
+        <a href="index.html" class="px-3.5 py-2 text-on-surface-variant hover:text-on-surface hover:bg-surface-container rounded-lg transition-colors">
+          الرئيسية
+        </a>
+        <a href="category.html?cat=new" class="px-3.5 py-2 text-on-surface-variant hover:text-on-surface hover:bg-surface-container rounded-lg transition-colors">
+          وصل حديثاً
+        </a>
+        <a href="category.html?cat=casual" class="px-3.5 py-2 text-on-surface-variant hover:text-on-surface hover:bg-surface-container rounded-lg transition-colors">
+          ملابس كاجوال
+        </a>
+        <a href="category.html?cat=dresses" class="px-3.5 py-2 text-on-surface-variant hover:text-on-surface hover:bg-surface-container rounded-lg transition-colors">
+          فساتين ومناسبات
+        </a>
+        <a href="category.html?cat=abayas" class="px-3.5 py-2 text-on-surface-variant hover:text-on-surface hover:bg-surface-container rounded-lg transition-colors">
+          عبايات ومحجبات
+        </a>
+        <a href="orders.html" class="px-3.5 py-2 bg-primary-container text-white font-bold rounded-lg shadow-sm transition-colors">
+          الطلبات والتتبع
+        </a>
+        <a href="dashboard.html" class="px-3.5 py-2 text-primary hover:bg-primary/10 rounded-lg transition-colors flex items-center gap-1 font-bold">
+          <span class="material-symbols-outlined text-sm">dashboard</span>
+          <span>لوحة الإدارة</span>
+        </a>
+      </nav>
+
+      <!-- Action Icons on the Left in RTL -->
+      <div class="flex items-center gap-1 sm:gap-2">
+        <!-- Search Trigger -->
+        <button data-action="open-search" class="p-2.5 text-on-surface-variant hover:text-on-surface hover:bg-surface-container rounded-full transition-colors" title="بحث">
+          <span class="material-symbols-outlined text-xl">search</span>
+        </button>
+
+        <!-- Wishlist -->
+        <a href="category.html?wishlist=true" class="relative p-2.5 text-on-surface-variant hover:text-on-surface hover:bg-surface-container rounded-full transition-colors" title="قائمة الأمنيات">
+          <span class="material-symbols-outlined text-xl">favorite</span>
+          <span class="header-wishlist-badge absolute top-1 left-1 w-4 h-4 rounded-full bg-primary text-white text-[10px] font-bold flex items-center justify-center">0</span>
+        </a>
+
+        <!-- Shopping Bag / Cart Drawer Trigger -->
+        <button data-action="open-cart" class="relative p-2.5 text-on-surface-variant hover:text-on-surface hover:bg-surface-container rounded-full transition-colors" title="حقيبة التسوق">
+          <span class="material-symbols-outlined text-xl">shopping_bag</span>
+          <span class="header-cart-badge absolute top-1 left-1 w-4 h-4 rounded-full bg-primary text-white text-[10px] font-bold flex items-center justify-center">0</span>
+        </button>
+
+        <!-- Orders Direct Link -->
+        <a href="orders.html" class="p-2.5 text-primary hover:bg-surface-container rounded-full transition-colors" title="طلباتي وتتبع الشحنات">
+          <span class="material-symbols-outlined text-xl">local_shipping</span>
+        </a>
+      </div>
+
+    </div>
+  </header>
+
+  <!-- Main Content Container -->
+  <main class="flex-1 max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-8 py-8 space-y-8">
+    
+    <!-- Hero / Mode Switcher Header -->
+    <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-outline-variant/60 pb-6">
+      <div>
+        <div class="flex items-center gap-2 text-xs text-primary font-bold mb-1">
+          <span class="material-symbols-outlined text-sm">package_2</span>
+          <span>خدمات الشحن والتوصيل المتكاملة</span>
+        </div>
+        <h1 class="text-2xl sm:text-3xl font-bold font-serif text-on-surface">صفحة الطلبات وتتبع الشحنات</h1>
+        <p class="text-xs sm:text-sm text-on-surface-variant mt-1">
+          تابعي مسار شحنتكِ خطوة بخطوة بالرقم، أو استعرضي وأديري كافة طلبات المتجر مع إمكانية طباعة البوالص وتأكيد تحويلات فودافون كاش.
+        </p>
+      </div>
+
+      <!-- Mode Switch Toggle: Track vs Manage -->
+      <div class="flex items-center p-1.5 rounded-2xl bg-surface-container-low border border-outline-variant/80 self-start md:self-auto">
+        <button id="btn-mode-track" onclick="switchOrdersMode('track')" class="px-4 py-2 rounded-xl text-xs sm:text-sm font-bold flex items-center gap-2 transition-all bg-white text-on-surface shadow-sm">
+          <span class="material-symbols-outlined text-base text-primary">search</span>
+          <span>تتبع طلبي (للعملاء)</span>
+        </button>
+        <button id="btn-mode-manage" onclick="switchOrdersMode('manage')" class="px-4 py-2 rounded-xl text-xs sm:text-sm font-bold flex items-center gap-2 transition-all text-on-surface-variant hover:text-on-surface">
+          <span class="material-symbols-outlined text-base">inventory</span>
+          <span>إدارة جميع الطلبات (المتجر)</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- ========================================================================= -->
+    <!-- VIEW 1: CUSTOMER ORDER TRACKING (تتبع طلب العميلة) -->
+    <!-- ========================================================================= -->
+    <section id="view-tracking" class="space-y-8">
+      
+      <!-- Search Box Card -->
+      <div class="p-6 sm:p-8 rounded-3xl bg-white border border-outline-variant/70 shadow-sm space-y-6 text-center max-w-3xl mx-auto">
+        <div class="w-14 h-14 rounded-2xl bg-primary/10 text-primary flex items-center justify-center mx-auto">
+          <span class="material-symbols-outlined text-3xl">local_shipping</span>
+        </div>
+        <div>
+          <h2 class="text-xl font-bold text-on-surface font-serif">أين وصل طلبي؟</h2>
+          <p class="text-xs sm:text-sm text-on-surface-variant mt-1">
+            أدخلي رقم الطلب (مثال: <span class="text-primary font-bold cursor-pointer hover:underline" onclick="fillSearch('CEL-9481')">#CEL-9481</span>) أو رقم الهاتف المسجل في الفاتورة لمشاهدة مسار الشحنة فوراً.
+          </p>
+        </div>
+
+        <form id="tracking-search-form" onsubmit="handleTrackingSearch(event)" class="flex flex-col sm:flex-row gap-2 max-w-xl mx-auto">
+          <div class="relative flex-1">
+            <input 
+              type="text" 
+              id="tracking-input" 
+              placeholder="رقم الطلب (مثلاً: CEL-9481) أو رقم الهاتف..." 
+              class="w-full pr-11 pl-4 py-3.5 rounded-2xl bg-surface-container-low border border-outline-variant focus:border-primary focus:bg-white focus:outline-none text-xs sm:text-sm text-right transition-all"
+              required
+            />
+            <span class="material-symbols-outlined text-outline-variant absolute right-3.5 top-3.5 text-xl">search</span>
+          </div>
+          <button type="submit" class="px-6 py-3.5 rounded-2xl bg-primary hover:bg-primary-container text-white font-bold text-xs sm:text-sm flex items-center justify-center gap-2 shadow-md hover:shadow-lg transition-all">
+            <span class="material-symbols-outlined text-base">timeline</span>
+            <span>تتبع الشحنة</span>
+          </button>
+        </form>
+
+        <!-- Quick chips for stored local orders -->
+        <div id="local-recent-orders" class="pt-2 border-t border-outline-variant/40 hidden text-right">
+          <span class="text-xs text-on-surface-variant font-medium ml-2">طلباتكِ المسجلة على هذا الجهاز:</span>
+          <div id="recent-orders-chips" class="inline-flex flex-wrap gap-1.5 mt-2"></div>
+        </div>
+      </div>
+
+      <!-- Tracking Result Container (Dynamically Rendered) -->
+      <div id="tracking-result-box" class="space-y-6 hidden">
+        <!-- Will be populated by JS -->
+      </div>
+
+      <!-- Empty State / Welcome Guide -->
+      <div id="tracking-empty-guide" class="p-8 rounded-3xl bg-surface-container-low border border-outline-variant/60 text-center max-w-2xl mx-auto space-y-4">
+        <span class="material-symbols-outlined text-4xl text-outline">verified</span>
+        <h3 class="text-base font-bold text-on-surface font-serif">خدمة التوصيل السريع مع سيلين</h3>
+        <p class="text-xs text-on-surface-variant leading-relaxed">
+          نحرص على توصيل قطعكِ المفضلة خلال ٢٤ إلى ٤٨ ساعة داخل المدن الرئيسية. بعد إتمام طلبكِ، يتم إرسال رسالة نصية وتحديث حالة الشحنة تلقائياً خطوة بخطوة.
+        </p>
+        <div class="flex items-center justify-center gap-4 pt-2 text-xs font-semibold text-primary">
+          <span class="flex items-center gap-1"><span class="material-symbols-outlined text-sm">check_circle</span> تغليف فاخر وآمن</span>
+          <span class="flex items-center gap-1"><span class="material-symbols-outlined text-sm">check_circle</span> فحص الجودة قبل الشحن</span>
+          <span class="flex items-center gap-1"><span class="material-symbols-outlined text-sm">check_circle</span> إمكانية المعاينة</span>
+        </div>
+      </div>
+
+    </section>
+
+    <!-- ========================================================================= -->
+    <!-- VIEW 2: STORE ORDERS MANAGEMENT (إدارة المتجر) -->
+    <!-- ========================================================================= -->
+    <section id="view-manage" class="space-y-6 hidden">
+      
+      <!-- Top Metrics Row -->
+      <div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
+        <div class="p-5 rounded-2xl bg-white border border-outline-variant/70 shadow-sm flex items-center justify-between">
+          <div>
+            <span class="text-xs text-on-surface-variant font-medium">إجمالي الطلبات</span>
+            <h3 class="text-2xl font-bold text-on-surface mt-1" id="metric-total-orders">0</h3>
+          </div>
+          <div class="w-12 h-12 rounded-xl bg-surface-container flex items-center justify-center text-primary">
+            <span class="material-symbols-outlined text-2xl">receipt_long</span>
+          </div>
+        </div>
+
+        <div class="p-5 rounded-2xl bg-white border border-outline-variant/70 shadow-sm flex items-center justify-between">
+          <div>
+            <span class="text-xs text-on-surface-variant font-medium">قيد التجهيز الفوري</span>
+            <h3 class="text-2xl font-bold text-primary mt-1" id="metric-processing-orders">0</h3>
+          </div>
+          <div class="w-12 h-12 rounded-xl bg-primary-fixed/40 flex items-center justify-center text-primary">
+            <span class="material-symbols-outlined text-2xl">hourglass_top</span>
+          </div>
+        </div>
+
+        <div class="p-5 rounded-2xl bg-white border border-outline-variant/70 shadow-sm flex items-center justify-between">
+          <div>
+            <span class="text-xs text-on-surface-variant font-medium">جاري الشحن مع المندوب</span>
+            <h3 class="text-2xl font-bold text-[#E65100] mt-1" id="metric-shipping-orders">0</h3>
+          </div>
+          <div class="w-12 h-12 rounded-xl bg-orange-50 flex items-center justify-center text-[#E65100]">
+            <span class="material-symbols-outlined text-2xl">local_shipping</span>
+          </div>
+        </div>
+
+        <div class="p-5 rounded-2xl bg-white border border-outline-variant/70 shadow-sm flex items-center justify-between">
+          <div>
+            <span class="text-xs text-on-surface-variant font-medium">تم التوصيل بنجاح</span>
+            <h3 class="text-2xl font-bold text-success mt-1" id="metric-delivered-orders">0</h3>
+          </div>
+          <div class="w-12 h-12 rounded-xl bg-green-50 flex items-center justify-center text-success">
+            <span class="material-symbols-outlined text-2xl">task_alt</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Action & Filter Bar -->
+      <div class="p-5 rounded-2xl bg-white border border-outline-variant/70 shadow-sm flex flex-col md:flex-row md:items-center justify-between gap-4">
+        
+        <!-- Filters by Status -->
+        <div class="flex flex-wrap items-center gap-1.5 text-xs font-semibold" id="status-filter-pills">
+          <button onclick="filterManageOrders('all', this)" class="status-pill active px-3.5 py-1.5 rounded-full bg-on-surface text-white transition-all">الكل (<span id="pill-count-all">0</span>)</button>
+          <button onclick="filterManageOrders('قيد التجهيز الفوري', this)" class="status-pill px-3.5 py-1.5 rounded-full bg-surface-container text-on-surface-variant hover:text-on-surface transition-all">قيد التجهيز</button>
+          <button onclick="filterManageOrders('تم الشحن مع المندوب', this)" class="status-pill px-3.5 py-1.5 rounded-full bg-surface-container text-on-surface-variant hover:text-on-surface transition-all">قيد الشحن</button>
+          <button onclick="filterManageOrders('تم التوصيل بنجاح', this)" class="status-pill px-3.5 py-1.5 rounded-full bg-surface-container text-on-surface-variant hover:text-on-surface transition-all">مكتمل</button>
+          <button onclick="filterManageOrders('فودافون كاش', this, 'payment')" class="status-pill px-3.5 py-1.5 rounded-full bg-red-50 text-red-700 hover:bg-red-100 transition-all flex items-center gap-1">
+            <span class="material-symbols-outlined text-xs">account_balance_wallet</span>
+            <span>فودافون كاش فقط</span>
+          </button>
+        </div>
+
+        <!-- Search & Refresh -->
+        <div class="flex items-center gap-2 w-full md:w-auto">
+          <div class="relative flex-1 md:w-64">
+            <input 
+              type="text" 
+              id="manage-search-input" 
+              oninput="handleManageSearch(this.value)" 
+              placeholder="بحث برقم الطلب، الاسم، أو الهاتف..." 
+              class="w-full pr-9 pl-3 py-2 rounded-xl bg-surface-container-low border border-outline-variant text-xs text-right focus:bg-white focus:outline-none focus:border-primary"
+            />
+            <span class="material-symbols-outlined text-outline-variant absolute right-2.5 top-2.5 text-sm">search</span>
+          </div>
+
+          <button onclick="refreshOrdersData()" class="p-2 rounded-xl bg-surface-container hover:bg-surface-container-high text-on-surface transition-colors" title="تحديث البيانات من السحابة">
+            <span class="material-symbols-outlined text-base">sync</span>
+          </button>
+          
+          <a href="dashboard.html" class="px-3.5 py-2 rounded-xl bg-primary text-white text-xs font-bold flex items-center gap-1 shadow-sm hover:shadow transition-all">
+            <span class="material-symbols-outlined text-sm">dashboard</span>
+            <span>لوحة التحكم الكاملة</span>
+          </a>
+        </div>
+      </div>
+
+      <!-- Orders List / Table Container -->
+      <div class="rounded-3xl bg-white border border-outline-variant/70 shadow-sm overflow-hidden">
+        <div class="overflow-x-auto">
+          <table class="w-full text-right text-xs">
+            <thead class="bg-surface-container text-on-surface font-semibold border-b border-outline-variant/60">
+              <tr>
+                <th class="py-3.5 px-4">رقم الطلب والتاريخ</th>
+                <th class="py-3.5 px-4">العميلة وجهة التوصيل</th>
+                <th class="py-3.5 px-4">القطع المطلوبة</th>
+                <th class="py-3.5 px-4">طريقة الدفع</th>
+                <th class="py-3.5 px-4">الإجمالي</th>
+                <th class="py-3.5 px-4">حالة الشحنة</th>
+                <th class="py-3.5 px-4 text-center">إجراءات وبوليصة</th>
+              </tr>
+            </thead>
+            <tbody id="manage-orders-table-body" class="divide-y divide-outline-variant/40">
+              <!-- Rendered via JS -->
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Empty State for table -->
+        <div id="manage-orders-empty" class="p-12 text-center text-on-surface-variant space-y-3 hidden">
+          <span class="material-symbols-outlined text-4xl text-outline">inbox</span>
+          <p class="font-medium text-sm">لا توجد طلبات مسجلة تطابق بحثك حالياً.</p>
+          <button onclick="createSampleOrder()" class="px-4 py-2 rounded-xl bg-primary text-white font-bold text-xs inline-flex items-center gap-1">
+            <span class="material-symbols-outlined text-sm">add</span>
+            <span>إنشاء طلب تجريبي للتجربة</span>
+          </button>
+        </div>
+      </div>
+
+    </section>
+
+  </main>
+
+  <!-- ========================================================================= -->
+  <!-- MODAL 1: PRINTABLE INVOICE / WAYBILL (بوليصة الشحن والفاتورة للطباعة) -->
+  <!-- ========================================================================= -->
+  <div id="invoice-modal" class="modal-overlay no-print">
+    <div class="modal-content p-0 max-w-3xl w-full bg-white rounded-3xl overflow-hidden shadow-2xl">
+      
+      <!-- Modal Header (Controls) -->
+      <div class="p-4 bg-surface-container border-b border-outline-variant/60 flex items-center justify-between">
+        <div class="flex items-center gap-2">
+          <button onclick="window.print()" class="px-4 py-2 rounded-xl bg-primary text-white text-xs font-bold flex items-center gap-1.5 shadow-sm hover:shadow">
+            <span class="material-symbols-outlined text-base">print</span>
+            <span>طباعة البوليصة والفاتورة (A4)</span>
+          </button>
+          <button onclick="closeInvoiceModal()" class="p-2 rounded-xl hover:bg-surface-container-high text-on-surface-variant">
+            <span class="material-symbols-outlined text-base">close</span>
+          </button>
+        </div>
+        <span class="text-xs font-bold text-on-surface">معاينة بوليصة الشحن الرسمية</span>
+      </div>
+
+      <!-- Printable Area -->
+      <div id="printable-invoice-container" class="p-8 text-right space-y-6 text-on-surface bg-white">
+        <!-- Invoice Header -->
+        <div class="flex items-center justify-between border-b-2 border-primary/20 pb-6">
+          <div>
+            <h2 class="font-serif text-3xl font-bold text-primary">سيلين للأزياء</h2>
+            <p class="text-xs text-outline font-sans tracking-widest mt-0.5">CELINE COUTURE - LUXURY ATELIER</p>
+            <p class="text-[11px] text-on-surface-variant mt-1">سجل تجاري: 1010987654 | الرقم الضريبي: 310987654300003</p>
+          </div>
+          <div class="text-left">
+            <div class="inline-block px-3 py-1 bg-surface-container rounded-lg text-xs font-mono font-bold text-on-surface" id="inv-order-id">
+              #CEL-9481
+            </div>
+            <p class="text-[11px] text-on-surface-variant mt-1" id="inv-order-date">تاريخ الطلب: 24 نوفمبر 2026</p>
+            <p class="text-[11px] font-bold text-primary mt-0.5" id="inv-order-status">الحالة: قيد التجهيز الفوري</p>
+          </div>
+        </div>
+
+        <!-- Customer & Delivery Info Grid -->
+        <div class="grid grid-cols-2 gap-6 p-4 rounded-2xl bg-surface-container-low border border-outline-variant/60 text-xs">
+          <div class="space-y-1.5">
+            <span class="text-outline font-bold text-[10px] uppercase tracking-wider">بيانات المستلمة والتوصيل:</span>
+            <p class="font-bold text-sm text-on-surface" id="inv-customer-name">سارة أحمد المنصور</p>
+            <p class="text-on-surface-variant" id="inv-customer-phone">0501234567</p>
+            <p class="text-on-surface-variant" id="inv-customer-address">الرياض، حي النرجس، شارع عثمان بن عفان، فيلا 24</p>
+          </div>
+          <div class="space-y-1.5 text-left">
+            <span class="text-outline font-bold text-[10px] uppercase tracking-wider">طريقة السداد والشحن:</span>
+            <p class="font-bold text-on-surface" id="inv-payment-method">فودافون كاش / تحويل محفظة</p>
+            <p class="text-on-surface-variant" id="inv-courier-note">شركة الشحن: سيلين إكسبريس (توصيل من الباب للباب)</p>
+            <p class="text-xs font-mono text-primary font-bold" id="inv-barcode">*CEL9481-WAYBILL*</p>
+          </div>
+        </div>
+
+        <!-- Ordered Items Table -->
+        <div>
+          <table class="w-full text-xs text-right border border-outline-variant/60 rounded-xl overflow-hidden">
+            <thead class="bg-surface-container font-bold text-on-surface border-b border-outline-variant/60">
+              <tr>
+                <th class="py-2.5 px-3">القطعة والبيان</th>
+                <th class="py-2.5 px-3">المقاس واللون</th>
+                <th class="py-2.5 px-3 text-center">الكمية</th>
+                <th class="py-2.5 px-3 text-left">السعر الفردي</th>
+                <th class="py-2.5 px-3 text-left">الإجمالي</th>
+              </tr>
+            </thead>
+            <tbody id="inv-items-body" class="divide-y divide-outline-variant/40">
+              <!-- JS rendered -->
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Totals & Barcode -->
+        <div class="flex items-end justify-between pt-4 border-t border-outline-variant/60 text-xs">
+          <div class="space-y-1">
+            <p class="text-[11px] text-on-surface-variant">شكراً لتسوقكِ مع سيلين للأزياء. نسعد بخدمتكِ دائماً.</p>
+            <p class="text-[10px] text-outline">سياسة الاستبدال والاسترجاع متاحة خلال ١٤ يوماً من استلام الشحنة.</p>
+          </div>
+          <div class="w-60 space-y-1.5 text-left">
+            <div class="flex justify-between"><span class="text-on-surface-variant">المجموع الفرعي:</span><span id="inv-subtotal" class="font-semibold">0 ر.س</span></div>
+            <div class="flex justify-between"><span class="text-on-surface-variant">رسوم الشحن والتوصيل:</span><span id="inv-shipping" class="font-semibold">مجاني</span></div>
+            <div class="flex justify-between"><span class="text-on-surface-variant">ضريبة القيمة المضافة (١٥٪):</span><span id="inv-tax" class="font-semibold">0 ر.س</span></div>
+            <div class="flex justify-between pt-1.5 border-t border-outline-variant/60 font-bold text-sm text-primary"><span class="text-on-surface">الإجمالي النهائي:</span><span id="inv-total">0 ر.س</span></div>
+          </div>
+        </div>
+
+        <!-- Courier Signature Area -->
+        <div class="pt-8 grid grid-cols-2 gap-8 text-center text-xs text-outline border-t border-dashed border-outline-variant">
+          <div>
+            <p class="font-medium">توقيع مستلمة الشحنة:</p>
+            <div class="h-12 border-b border-outline-variant/60 mt-2"></div>
+          </div>
+          <div>
+            <p class="font-medium">ختم المتجر ومندوب التوصيل:</p>
+            <div class="h-12 border-b border-outline-variant/60 mt-2"></div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ========================================================================= -->
+  <!-- MODAL 2: VODAFONE CASH RECEIPT VIEWER -->
+  <!-- ========================================================================= -->
+  <div id="vodafone-receipt-modal" class="modal-overlay no-print">
+    <div class="modal-content p-6 max-w-lg w-full bg-white rounded-3xl shadow-2xl space-y-4 text-right">
+      <div class="flex items-center justify-between border-b border-outline-variant/60 pb-3">
+        <button onclick="closeReceiptModal()" class="p-1.5 rounded-lg hover:bg-surface-container text-on-surface-variant">
+          <span class="material-symbols-outlined text-base">close</span>
+        </button>
+        <div class="flex items-center gap-2">
+          <span class="text-xs font-bold text-on-surface">إيصال تحويل فودافون كاش</span>
+          <span class="material-symbols-outlined text-primary text-base">receipt</span>
+        </div>
+      </div>
+
+      <div class="p-3.5 rounded-2xl bg-surface-container-low text-xs space-y-1.5 border border-outline-variant/60">
+        <div class="flex justify-between"><span class="text-outline">رقم الطلب:</span><span id="rcpt-order-id" class="font-bold font-mono text-primary">-</span></div>
+        <div class="flex justify-between"><span class="text-outline">رقم المحفظة المحوّل منها:</span><span id="rcpt-sender-wallet" class="font-bold font-mono text-on-surface">-</span></div>
+        <div class="flex justify-between"><span class="text-outline">المبلغ المستحق:</span><span id="rcpt-amount" class="font-bold text-on-surface">-</span></div>
+      </div>
+
+      <div class="rounded-2xl border border-outline-variant/60 overflow-hidden bg-black/5 p-2 flex items-center justify-center min-h-[260px]">
+        <img id="rcpt-image-preview" src="" alt="إيصال فودافون كاش" class="max-h-80 w-auto object-contain rounded-xl shadow-sm"/>
+        <div id="rcpt-no-image" class="hidden text-center text-xs text-on-surface-variant p-8">
+          <span class="material-symbols-outlined text-3xl text-outline mb-1">hide_image</span>
+          <p>لم يتم إرفاق صورة إيصال، تم التحويل المباشر مع كتابة رقم المحفظة.</p>
+        </div>
+      </div>
+
+      <div class="flex gap-2 pt-2">
+        <button onclick="confirmOrderPaymentFromReceipt()" class="flex-1 py-3 rounded-xl bg-success text-white font-bold text-xs flex items-center justify-center gap-1 shadow-sm hover:shadow">
+          <span class="material-symbols-outlined text-base">verified</span>
+          <span>اعتماد الدفع وبدء التجهيز</span>
+        </button>
+        <button onclick="closeReceiptModal()" class="px-5 py-3 rounded-xl bg-surface-container text-on-surface font-bold text-xs hover:bg-surface-container-high transition-colors">
+          إغلاق
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Cart Drawer -->
+  <div id="cart-drawer-overlay" class="cart-drawer-overlay no-print" aria-hidden="true"></div>
+  <aside id="cart-drawer" class="cart-drawer no-print" aria-label="حقيبة التسوق">
+    <div class="p-5 border-b border-outline-variant/60 flex items-center justify-between bg-surface">
+      <div class="flex items-center gap-2">
+        <span class="material-symbols-outlined text-xl text-primary">shopping_bag</span>
+        <h2 class="font-serif text-lg font-bold text-on-surface">حقيبة التسوق (<span id="cart-drawer-count">0</span>)</h2>
+      </div>
+      <button data-action="close-cart" class="p-2 rounded-full hover:bg-surface-container text-on-surface-variant transition-colors" aria-label="إغلاق">
+        <span class="material-symbols-outlined text-xl">close</span>
+      </button>
+    </div>
+    <div id="cart-drawer-items" class="p-5 space-y-4 overflow-y-auto flex-1"></div>
+    <div id="cart-drawer-footer" class="p-5 border-t border-outline-variant/60 bg-surface-container-lowest space-y-4"></div>
+  </aside>
+
+  <!-- Toast Notification Container -->
+  <div id="toast-container" class="fixed bottom-6 left-6 z-50 flex flex-col gap-2 pointer-events-none no-print"></div>
+
+  <!-- Scripts -->
+  <script src="js/products-data.js"></script>
+  <script src="js/cart.js"></script>
+  <script type="module" src="js/firebase-service.js"></script>
+  <script src="js/main.js"></script>
+
+  <!-- Orders Controller Logic -->
+  <script>
+    let allOrders = [];
+    let currentReceiptOrder = null;
+    let activeFilter = 'all';
+
+    // 1. Initial Load & URL Parameter routing
+    document.addEventListener('DOMContentLoaded', async () => {
+      loadStoredOrders();
+
+      // Check URL parameters (e.g. ?id=CEL-9481 or ?view=manage)
+      const urlParams = new URLSearchParams(window.location.search);
+      const orderIdParam = urlParams.get('id');
+      const viewParam = urlParams.get('view');
+
+      if (viewParam === 'manage') {
+        switchOrdersMode('manage');
+      }
+
+      if (orderIdParam) {
+        document.getElementById('tracking-input').value = orderIdParam;
+        performOrderSearch(orderIdParam);
+      }
+
+      // Listen for Firebase Ready
+      if (window.firebaseService) {
+        syncOrdersFromFirebase();
+      } else {
+        window.addEventListener('firebase-ready', () => {
+          syncOrdersFromFirebase();
+        });
+      }
+    });
+
+    // 2. Load Local & Cloud Orders
+    function loadStoredOrders() {
+      const stored = localStorage.getItem('celine_store_orders');
+      if (stored) {
+        try {
+          allOrders = JSON.parse(stored);
+        } catch (e) {
+          allOrders = [];
+        }
+      }
+
+      // If empty, add a default realistic sample order so the user sees real UI immediately
+      if (!allOrders || allOrders.length === 0) {
+        allOrders = [
+          {
+            orderNumber: 'CEL-9481',
+            createdAt: new Date().toISOString(),
+            status: 'قيد التجهيز الفوري',
+            paymentMethod: 'فودافون كاش (تحويل محفظة)',
+            vodafoneSender: '01012345678',
+            vodafoneReceiptImage: 'https://images.unsplash.com/photo-1554224155-8d04cb21cd6c?auto=format&fit=crop&w=600&q=80',
+            subtotal: 620,
+            shippingCost: 0,
+            tax: 93,
+            total: 713,
+            customer: {
+              fullName: 'ريم عبد العزيز الشمري',
+              phone: '0559876543',
+              address: 'شارع الملك فهد، برج اللؤلؤة، شقة 18',
+              city: 'الرياض'
+            },
+            items: [
+              {
+                id: 'abaya-chic-01',
+                title: 'عباية حرير مطرزة بقصة انسيابية',
+                price: 620,
+                quantity: 1,
+                selectedSize: 'L',
+                selectedColor: 'أسود كلاسيكي',
+                image: 'https://images.unsplash.com/photo-1583391733956-3750e0ff4e8b?auto=format&fit=crop&w=600&q=80'
+              }
+            ]
+          }
+        ];
+        localStorage.setItem('celine_store_orders', JSON.stringify(allOrders));
+      }
+
+      renderLocalRecentChips();
+      renderManageOrdersTable();
+      updateMetrics();
+    }
+
+    async function syncOrdersFromFirebase() {
+      try {
+        if (window.firebaseService && typeof window.firebaseService.getOrders === 'function') {
+          const cloudOrders = await window.firebaseService.getOrders();
+          if (cloudOrders && cloudOrders.length > 0) {
+            allOrders = cloudOrders;
+            localStorage.setItem('celine_store_orders', JSON.stringify(allOrders));
+            renderManageOrdersTable();
+            updateMetrics();
+            renderLocalRecentChips();
+          }
+        }
+      } catch (err) {
+        console.warn("Could not fetch orders from Firebase:", err);
+      }
+    }
+
+    async function refreshOrdersData() {
+      await syncOrdersFromFirebase();
+      showToast('تم تحديث قائمة الطلبات بنجاح ✓', 'success');
+    }
+
+    // 3. Switch Mode (Track vs Manage)
+    window.switchOrdersMode = function(mode) {
+      const btnTrack = document.getElementById('btn-mode-track');
+      const btnManage = document.getElementById('btn-mode-manage');
+      const viewTrack = document.getElementById('view-tracking');
+      const viewManage = document.getElementById('view-manage');
+
+      if (mode === 'track') {
+        btnTrack.className = "px-4 py-2 rounded-xl text-xs sm:text-sm font-bold flex items-center gap-2 transition-all bg-white text-on-surface shadow-sm";
+        btnManage.className = "px-4 py-2 rounded-xl text-xs sm:text-sm font-bold flex items-center gap-2 transition-all text-on-surface-variant hover:text-on-surface";
+        viewTrack.classList.remove('hidden');
+        viewManage.classList.add('hidden');
+      } else {
+        btnManage.className = "px-4 py-2 rounded-xl text-xs sm:text-sm font-bold flex items-center gap-2 transition-all bg-white text-on-surface shadow-sm";
+        btnTrack.className = "px-4 py-2 rounded-xl text-xs sm:text-sm font-bold flex items-center gap-2 transition-all text-on-surface-variant hover:text-on-surface";
+        viewManage.classList.remove('hidden');
+        viewTrack.classList.add('hidden');
+        renderManageOrdersTable();
+        updateMetrics();
+      }
+    };
+
+    // 4. Tracking Search Logic
+    window.handleTrackingSearch = function(e) {
+      if (e) e.preventDefault();
+      const val = document.getElementById('tracking-input').value.trim();
+      if (!val) return;
+      performOrderSearch(val);
+    };
+
+    window.fillSearch = function(val) {
+      document.getElementById('tracking-input').value = val;
+      performOrderSearch(val);
+    };
+
+    function performOrderSearch(term) {
+      const cleanTerm = term.replace('#', '').trim().toLowerCase();
+      
+      // Look up in allOrders
+      const order = allOrders.find(o => {
+        const orderNum = (o.orderNumber || o.id || '').toLowerCase();
+        const phone = (o.customer?.phone || o.customerPhone || '').replace(/\s+/g, '');
+        return orderNum.includes(cleanTerm) || phone.includes(cleanTerm);
+      });
+
+      const resultBox = document.getElementById('tracking-result-box');
+      const emptyGuide = document.getElementById('tracking-empty-guide');
+
+      if (!order) {
+        resultBox.classList.remove('hidden');
+        emptyGuide.classList.add('hidden');
+        resultBox.innerHTML = `
+          <div class="p-8 rounded-3xl bg-white border border-outline-variant/70 text-center space-y-4 shadow-sm">
+            <div class="w-14 h-14 rounded-full bg-red-50 text-error flex items-center justify-center mx-auto">
+              <span class="material-symbols-outlined text-3xl">search_off</span>
+            </div>
+            <h3 class="text-lg font-bold text-on-surface font-serif">لم يتم العثور على طلب برقم: ${term}</h3>
+            <p class="text-xs text-on-surface-variant max-w-md mx-auto">
+              يرجى التأكد من كتابة رقم الطلب بالشكل الصحيح كما ورد في الفاتورة (مثال: #CEL-9481) أو إدخال رقم هاتفكِ المسجل.
+            </p>
+            <div class="pt-2 flex justify-center gap-2">
+              <button onclick="createSampleOrder()" class="px-4 py-2 rounded-xl bg-primary text-white font-bold text-xs">
+                إنشاء طلب تجريبي وتتبعه الآن
+              </button>
+            </div>
+          </div>
+        `;
+        return;
+      }
+
+      // Found Order! Render Full Tracker
+      resultBox.classList.remove('hidden');
+      emptyGuide.classList.add('hidden');
+      renderTrackingResult(order);
+    }
+
+    function renderTrackingResult(order) {
+      const resultBox = document.getElementById('tracking-result-box');
+      const status = order.status || 'قيد التجهيز الفوري';
+      
+      // Calculate stepper progress
+      let stepIndex = 1; // 1: Confirmed, 2: Processing, 3: In Transit, 4: Delivered
+      if (status.includes('تجهيز') || status.includes('مراجعة')) stepIndex = 2;
+      if (status.includes('شحن') || status.includes('توصيل مع')) stepIndex = 3;
+      if (status.includes('تم التوصيل') || status.includes('مكتمل')) stepIndex = 4;
+
+      const orderItems = order.items || [];
+      const customer = order.customer || {};
+      const orderDate = order.createdAt ? new Date(order.createdAt).toLocaleDateString('ar-EG', { day: 'numeric', month: 'long', year: 'numeric' }) : 'اليوم';
+
+      resultBox.innerHTML = `
+        <div class="p-6 sm:p-8 rounded-3xl bg-white border border-outline-variant/70 shadow-sm space-y-8 text-right">
+          
+          <!-- Order Header Bar -->
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-outline-variant/60 pb-6">
+            <div>
+              <div class="flex items-center gap-2">
+                <span class="text-xs font-mono font-bold px-3 py-1 bg-surface-container rounded-lg text-primary">#${order.orderNumber || order.id}</span>
+                <span class="text-xs text-on-surface-variant">${orderDate}</span>
+              </div>
+              <h2 class="text-xl font-bold font-serif text-on-surface mt-2">مرحباً ${customer.fullName || 'عميلتنا العزيزة'}، شحنتكِ في أيدٍ أمينة</h2>
+            </div>
+            <div class="flex items-center gap-2">
+              <button onclick="openInvoiceModal('${order.orderNumber || order.id}')" class="px-4 py-2 rounded-xl bg-surface-container hover:bg-surface-container-high text-on-surface font-bold text-xs flex items-center gap-1.5 transition-colors">
+                <span class="material-symbols-outlined text-base">print</span>
+                <span>طباعة الفاتورة</span>
+              </button>
+              <a href="https://wa.me/966500000000?text=${encodeURIComponent('مرحباً، أود الاستفسار عن حالة طلبي رقم: ' + (order.orderNumber || order.id))}" target="_blank" class="px-4 py-2 rounded-xl bg-[#25D366] text-white font-bold text-xs flex items-center gap-1.5 shadow-sm hover:opacity-90 transition-opacity">
+                <span class="material-symbols-outlined text-base">chat</span>
+                <span>واتساب</span>
+              </a>
+            </div>
+          </div>
+
+          <!-- 4-Stage Stepper -->
+          <div class="py-4 px-2 sm:px-6">
+            <div class="relative flex items-center justify-between">
+              <!-- Connecting Line -->
+              <div class="absolute top-1/2 left-0 right-0 -translate-y-1/2 h-1 bg-surface-container-high z-0"></div>
+              <div class="absolute top-1/2 right-0 -translate-y-1/2 h-1 bg-primary z-0 transition-all duration-500" style="width: ${(stepIndex - 1) * 33.3}%"></div>
+
+              <!-- Step 1 -->
+              <div class="relative z-10 flex flex-col items-center text-center">
+                <div class="w-10 h-10 rounded-full flex items-center justify-center font-bold text-xs ${stepIndex >= 1 ? 'bg-primary text-white shadow-md' : 'bg-surface-container text-outline'}">
+                  <span class="material-symbols-outlined text-lg">check</span>
+                </div>
+                <span class="text-[11px] font-bold text-on-surface mt-2">تم تأكيد الطلب</span>
+                <span class="text-[10px] text-on-surface-variant">${orderDate}</span>
+              </div>
+
+              <!-- Step 2 -->
+              <div class="relative z-10 flex flex-col items-center text-center">
+                <div class="w-10 h-10 rounded-full flex items-center justify-center font-bold text-xs ${stepIndex >= 2 ? 'bg-primary text-white shadow-md' : 'bg-surface-container text-outline'}">
+                  <span class="material-symbols-outlined text-lg">inventory_2</span>
+                </div>
+                <span class="text-[11px] font-bold text-on-surface mt-2">التجهيز والتغليف</span>
+                <span class="text-[10px] text-on-surface-variant">${stepIndex >= 2 ? 'جاري الآن' : 'قريباً'}</span>
+              </div>
+
+              <!-- Step 3 -->
+              <div class="relative z-10 flex flex-col items-center text-center">
+                <div class="w-10 h-10 rounded-full flex items-center justify-center font-bold text-xs ${stepIndex >= 3 ? 'bg-primary text-white shadow-md' : 'bg-surface-container text-outline'}">
+                  <span class="material-symbols-outlined text-lg">local_shipping</span>
+                </div>
+                <span class="text-[11px] font-bold text-on-surface mt-2">مع شركة الشحن</span>
+                <span class="text-[10px] text-on-surface-variant">${stepIndex >= 3 ? 'في الطريق إليكِ' : 'المرحلة التالية'}</span>
+              </div>
+
+              <!-- Step 4 -->
+              <div class="relative z-10 flex flex-col items-center text-center">
+                <div class="w-10 h-10 rounded-full flex items-center justify-center font-bold text-xs ${stepIndex >= 4 ? 'bg-success text-white shadow-md' : 'bg-surface-container text-outline'}">
+                  <span class="material-symbols-outlined text-lg">home</span>
+                </div>
+                <span class="text-[11px] font-bold text-on-surface mt-2">تم التسليم</span>
+                <span class="text-[10px] text-on-surface-variant">${stepIndex >= 4 ? 'تم بنجاح ✓' : 'المحطة الأخيرة'}</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Grid: Info + Ordered Items -->
+          <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 pt-4">
+            
+            <!-- Items Column (2 Cols on lg) -->
+            <div class="lg:col-span-2 space-y-4">
+              <h3 class="text-sm font-bold text-on-surface flex items-center gap-1.5">
+                <span class="material-symbols-outlined text-primary text-base">shopping_bag</span>
+                <span>محتويات الشحنة (${orderItems.length} قطع)</span>
+              </h3>
+
+              <div class="space-y-3">
+                ${orderItems.map(item => `
+                  <div class="flex items-center gap-4 p-3.5 rounded-2xl bg-surface-container-low border border-outline-variant/60">
+                    <img src="${item.image || 'https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?auto=format&fit=crop&w=400&q=80'}" alt="${item.title}" class="w-16 h-20 object-cover rounded-xl shadow-sm"/>
+                    <div class="flex-1 space-y-1 text-right">
+                      <h4 class="text-xs font-bold text-on-surface line-clamp-1">${item.title}</h4>
+                      <p class="text-[11px] text-on-surface-variant">المقاس: <strong class="text-on-surface">${item.selectedSize || 'قياسي'}</strong> | اللون: <strong class="text-on-surface">${item.selectedColor || 'مختار'}</strong></p>
+                      <p class="text-[11px] text-on-surface-variant">الكمية: ${item.quantity || 1} × ${item.price} ر.س</p>
+                    </div>
+                    <div class="text-left font-bold text-xs text-primary">
+                      ${((item.price || 0) * (item.quantity || 1)).toFixed(2)} ر.س
+                    </div>
+                  </div>
+                `).join('')}
+              </div>
+            </div>
+
+            <!-- Shipping & Payment Breakdown -->
+            <div class="p-5 rounded-2xl bg-surface-container border border-outline-variant/60 space-y-4 text-xs">
+              <h3 class="text-sm font-bold text-on-surface flex items-center gap-1.5">
+                <span class="material-symbols-outlined text-primary text-base">pin_drop</span>
+                <span>عنوان التوصيل وبيانات السداد</span>
+              </h3>
+
+              <div class="space-y-2 text-on-surface-variant">
+                <div><span class="text-outline">المستلمة:</span> <strong class="text-on-surface">${customer.fullName || '-'}</strong></div>
+                <div><span class="text-outline">رقم الهاتف:</span> <strong class="text-on-surface font-mono">${customer.phone || '-'}</strong></div>
+                <div><span class="text-outline">العنوان:</span> ${customer.address || '-'}, ${customer.city || ''}</div>
+                <div><span class="text-outline">طريقة الدفع:</span> <strong class="text-primary">${order.paymentMethod || 'الدفع عند الاستلام'}</strong></div>
+                ${order.vodafoneSender ? `<div><span class="text-outline">محفظة فودافون المحوّل منها:</span> <strong class="font-mono text-on-surface">${order.vodafoneSender}</strong></div>` : ''}
+              </div>
+
+              <div class="pt-3 border-t border-outline-variant/60 space-y-1.5">
+                <div class="flex justify-between"><span>المجموع الفرعي:</span><span>${(order.subtotal || order.total || 0).toFixed(2)} ر.س</span></div>
+                <div class="flex justify-between"><span>رسوم الشحن:</span><span class="text-success font-semibold">${order.shippingCost === 0 ? 'شحن مجاني' : (order.shippingCost || 0) + ' ر.س'}</span></div>
+                <div class="flex justify-between pt-2 border-t border-outline-variant/60 font-bold text-sm text-primary">
+                  <span>الإجمالي المدفوع:</span>
+                  <span>${(order.total || 0).toFixed(2)} ر.س</span>
+                </div>
+              </div>
+            </div>
+
+          </div>
+
+        </div>
+      `;
+    }
+
+    // 5. Render Manage Orders Table
+    function renderManageOrdersTable() {
+      const tbody = document.getElementById('manage-orders-table-body');
+      const emptyDiv = document.getElementById('manage-orders-empty');
+      if (!tbody) return;
+
+      let filtered = [...allOrders];
+
+      // Filter by status or payment
+      if (activeFilter !== 'all') {
+        if (activeFilter === 'فودافون كاش') {
+          filtered = filtered.filter(o => (o.paymentMethod || '').includes('فودافون'));
+        } else {
+          filtered = filtered.filter(o => (o.status || '').includes(activeFilter));
+        }
+      }
+
+      if (filtered.length === 0) {
+        tbody.innerHTML = '';
+        emptyDiv.classList.remove('hidden');
+        return;
+      }
+
+      emptyDiv.classList.add('hidden');
+      tbody.innerHTML = filtered.map(order => {
+        const customer = order.customer || {};
+        const items = order.items || [];
+        const isVodafone = (order.paymentMethod || '').includes('فودافون');
+        const orderDate = order.createdAt ? new Date(order.createdAt).toLocaleDateString('ar-EG', { day: 'numeric', month: 'short' }) : 'اليوم';
+        const currentStatus = order.status || 'قيد التجهيز الفوري';
+
+        return `
+          <tr class="hover:bg-surface-container-low transition-colors">
+            <td class="py-3.5 px-4">
+              <div class="font-mono font-bold text-primary cursor-pointer hover:underline" onclick="viewOrderInTracker('${order.orderNumber || order.id}')">
+                #${order.orderNumber || order.id}
+              </div>
+              <div class="text-[10px] text-on-surface-variant mt-0.5">${orderDate}</div>
+            </td>
+            
+            <td class="py-3.5 px-4">
+              <div class="font-bold text-on-surface">${customer.fullName || 'عميلة'}</div>
+              <div class="text-[11px] text-on-surface-variant font-mono">${customer.phone || '-'}</div>
+              <div class="text-[10px] text-outline truncate max-w-[150px]">${customer.city || ''} - ${customer.address || ''}</div>
+            </td>
+
+            <td class="py-3.5 px-4">
+              <div class="font-semibold">${items.length} قطع</div>
+              <div class="text-[10px] text-on-surface-variant truncate max-w-[140px]">
+                ${items.map(i => i.title).join('، ')}
+              </div>
+            </td>
+
+            <td class="py-3.5 px-4">
+              <span class="px-2.5 py-1 rounded-full text-[10px] font-bold inline-flex items-center gap-1 ${isVodafone ? 'bg-red-50 text-red-700 border border-red-200' : 'bg-surface-container text-on-surface-variant'}">
+                ${isVodafone ? '<span class="material-symbols-outlined text-[12px]">account_balance_wallet</span>' : ''}
+                <span>${order.paymentMethod || 'عند الاستلام'}</span>
+              </span>
+              ${isVodafone && order.vodafoneReceiptImage ? `
+                <button onclick="openReceiptModal('${order.orderNumber || order.id}')" class="block mt-1 text-[10px] text-primary font-bold hover:underline">
+                  عرض الإيصال 📷
+                </button>
+              ` : ''}
+            </td>
+
+            <td class="py-3.5 px-4 font-bold text-on-surface">
+              ${(order.total || 0).toFixed(2)} ر.س
+            </td>
+
+            <td class="py-3.5 px-4">
+              <select onchange="updateOrderStatusLive('${order.orderNumber || order.id}', this.value)" class="bg-surface-container-low border border-outline-variant/60 rounded-xl px-2 py-1 text-[11px] font-bold text-on-surface focus:outline-none focus:border-primary">
+                <option value="قيد التجهيز الفوري" ${currentStatus.includes('تجهيز') ? 'selected' : ''}>قيد التجهيز الفوري</option>
+                <option value="تم الشحن مع المندوب" ${currentStatus.includes('شحن') ? 'selected' : ''}>تم الشحن مع المندوب</option>
+                <option value="تم التوصيل بنجاح" ${currentStatus.includes('التوصيل') ? 'selected' : ''}>تم التوصيل بنجاح</option>
+                <option value="ملغي" ${currentStatus.includes('ملغي') ? 'selected' : ''}>ملغي</option>
+              </select>
+            </td>
+
+            <td class="py-3.5 px-4 text-center">
+              <div class="flex items-center justify-center gap-1.5">
+                <button onclick="openInvoiceModal('${order.orderNumber || order.id}')" class="p-1.5 rounded-lg bg-surface-container hover:bg-surface-container-high text-on-surface" title="طباعة البوليصة والفاتورة">
+                  <span class="material-symbols-outlined text-sm">print</span>
+                </button>
+                <a href="https://wa.me/${(customer.phone || '').replace(/[^0-9]/g, '')}?text=${encodeURIComponent('مرحباً أختي ' + (customer.fullName || '') + '، بخصوص طلبكِ رقم #' + (order.orderNumber || order.id) + ' من متجر سيلين للأزياء...')}" target="_blank" class="p-1.5 rounded-lg bg-green-50 hover:bg-green-100 text-green-700" title="مراسلة واتساب">
+                  <span class="material-symbols-outlined text-sm">chat</span>
+                </a>
+                <button onclick="viewOrderInTracker('${order.orderNumber || order.id}')" class="p-1.5 rounded-lg bg-surface-container hover:bg-surface-container-high text-primary" title="عرض تفاصيل التتبع">
+                  <span class="material-symbols-outlined text-sm">visibility</span>
+                </button>
+              </div>
+            </td>
+          </tr>
+        `;
+      }).join('');
+    }
+
+    // 6. Live Status Updater
+    window.updateOrderStatusLive = async function(orderId, newStatus) {
+      const idx = allOrders.findIndex(o => (o.orderNumber === orderId || o.id === orderId));
+      if (idx !== -1) {
+        allOrders[idx].status = newStatus;
+        localStorage.setItem('celine_store_orders', JSON.stringify(allOrders));
+      }
+
+      // Sync to Firebase
+      if (window.firebaseService && typeof window.firebaseService.updateOrderStatus === 'function') {
+        await window.firebaseService.updateOrderStatus(orderId, newStatus, 'تحديث يدوي من صفحة الطلبات');
+      }
+
+      updateMetrics();
+      showToast(`تم تحديث حالة الطلب #${orderId} إلى (${newStatus}) بنجاح ✓`, 'success');
+    };
+
+    // 7. Filter Tabs for Manage View
+    window.filterManageOrders = function(status, btn, type = 'status') {
+      activeFilter = status;
+      document.querySelectorAll('.status-pill').forEach(p => {
+        p.classList.remove('active', 'bg-on-surface', 'text-white');
+        p.classList.add('bg-surface-container', 'text-on-surface-variant');
+      });
+      btn.classList.add('active', 'bg-on-surface', 'text-white');
+      btn.classList.remove('bg-surface-container', 'text-on-surface-variant');
+      renderManageOrdersTable();
+    };
+
+    window.handleManageSearch = function(query) {
+      const term = query.trim().toLowerCase();
+      if (!term) {
+        renderManageOrdersTable();
+        return;
+      }
+      const filtered = allOrders.filter(o => {
+        const id = (o.orderNumber || o.id || '').toLowerCase();
+        const name = (o.customer?.fullName || '').toLowerCase();
+        const phone = (o.customer?.phone || '').toLowerCase();
+        return id.includes(term) || name.includes(term) || phone.includes(term);
+      });
+
+      const tbody = document.getElementById('manage-orders-table-body');
+      const emptyDiv = document.getElementById('manage-orders-empty');
+      if (filtered.length === 0) {
+        tbody.innerHTML = '';
+        emptyDiv.classList.remove('hidden');
+      } else {
+        emptyDiv.classList.add('hidden');
+        renderManageOrdersTableWithList(filtered);
+      }
+    };
+
+    function renderManageOrdersTableWithList(list) {
+      const orig = allOrders;
+      allOrders = list;
+      renderManageOrdersTable();
+      allOrders = orig;
+    }
+
+    // 8. Metrics Updater
+    function updateMetrics() {
+      const total = allOrders.length;
+      const processing = allOrders.filter(o => (o.status || '').includes('تجهيز')).length;
+      const shipping = allOrders.filter(o => (o.status || '').includes('شحن')).length;
+      const delivered = allOrders.filter(o => (o.status || '').includes('التوصيل')).length;
+
+      document.getElementById('metric-total-orders').textContent = total;
+      document.getElementById('metric-processing-orders').textContent = processing;
+      document.getElementById('metric-shipping-orders').textContent = shipping;
+      document.getElementById('metric-delivered-orders').textContent = delivered;
+      document.getElementById('pill-count-all').textContent = total;
+    }
+
+    // 9. View Order In Tracker shortcut
+    window.viewOrderInTracker = function(orderId) {
+      switchOrdersMode('track');
+      document.getElementById('tracking-input').value = orderId;
+      performOrderSearch(orderId);
+      window.scrollTo({ top: 100, behavior: 'smooth' });
+    };
+
+    // 10. Printable Invoice Modal Logic
+    window.openInvoiceModal = function(orderId) {
+      const order = allOrders.find(o => (o.orderNumber === orderId || o.id === orderId));
+      if (!order) return;
+
+      const customer = order.customer || {};
+      const items = order.items || [];
+      const orderDate = order.createdAt ? new Date(order.createdAt).toLocaleDateString('ar-EG', { day: 'numeric', month: 'long', year: 'numeric' }) : '24 نوفمبر 2026';
+
+      document.getElementById('inv-order-id').textContent = '#' + (order.orderNumber || order.id);
+      document.getElementById('inv-order-date').textContent = 'تاريخ الطلب: ' + orderDate;
+      document.getElementById('inv-order-status').textContent = 'الحالة: ' + (order.status || 'قيد التجهيز الفوري');
+      document.getElementById('inv-customer-name').textContent = customer.fullName || 'عميلة سيلين';
+      document.getElementById('inv-customer-phone').textContent = customer.phone || '-';
+      document.getElementById('inv-customer-address').textContent = (customer.city || '') + ' - ' + (customer.address || '');
+      document.getElementById('inv-payment-method').textContent = order.paymentMethod || 'الدفع عند الاستلام';
+      document.getElementById('inv-barcode').textContent = '*' + (order.orderNumber || order.id).replace(/[^a-zA-Z0-9]/g, '') + '*';
+
+      const itemsBody = document.getElementById('inv-items-body');
+      itemsBody.innerHTML = items.map(it => `
+        <tr>
+          <td class="py-2 px-3 font-bold">${it.title}</td>
+          <td class="py-2 px-3 text-on-surface-variant">${it.selectedSize || 'قياسي'} - ${it.selectedColor || '-'}</td>
+          <td class="py-2 px-3 text-center font-bold">${it.quantity || 1}</td>
+          <td class="py-2 px-3 text-left font-mono">${(it.price || 0).toFixed(2)} ر.س</td>
+          <td class="py-2 px-3 text-left font-bold font-mono">${((it.price || 0) * (it.quantity || 1)).toFixed(2)} ر.س</td>
+        </tr>
+      `).join('');
+
+      const subtotal = order.subtotal || order.total || 0;
+      const tax = subtotal * 0.15;
+      document.getElementById('inv-subtotal').textContent = subtotal.toFixed(2) + ' ر.س';
+      document.getElementById('inv-shipping').textContent = (order.shippingCost === 0 ? 'مجاني' : (order.shippingCost || 0) + ' ر.س');
+      document.getElementById('inv-tax').textContent = tax.toFixed(2) + ' ر.س';
+      document.getElementById('inv-total').textContent = (order.total || subtotal).toFixed(2) + ' ر.س';
+
+      document.getElementById('invoice-modal').classList.add('active');
+    };
+
+    window.closeInvoiceModal = function() {
+      document.getElementById('invoice-modal').classList.remove('active');
+    };
+
+    // 11. Vodafone Cash Receipt Modal Logic
+    window.openReceiptModal = function(orderId) {
+      const order = allOrders.find(o => (o.orderNumber === orderId || o.id === orderId));
+      if (!order) return;
+      currentReceiptOrder = order;
+
+      document.getElementById('rcpt-order-id').textContent = '#' + (order.orderNumber || order.id);
+      document.getElementById('rcpt-sender-wallet').textContent = order.vodafoneSender || 'غير محدد';
+      document.getElementById('rcpt-amount').textContent = (order.total || 0).toFixed(2) + ' ر.س';
+
+      const img = document.getElementById('rcpt-image-preview');
+      const noImg = document.getElementById('rcpt-no-image');
+
+      if (order.vodafoneReceiptImage) {
+        img.src = order.vodafoneReceiptImage;
+        img.classList.remove('hidden');
+        noImg.classList.add('hidden');
+      } else {
+        img.classList.add('hidden');
+        noImg.classList.remove('hidden');
+      }
+
+      document.getElementById('vodafone-receipt-modal').classList.add('active');
+    };
+
+    window.closeReceiptModal = function() {
+      document.getElementById('vodafone-receipt-modal').classList.remove('active');
+    };
+
+    window.confirmOrderPaymentFromReceipt = async function() {
+      if (!currentReceiptOrder) return;
+      await updateOrderStatusLive(currentReceiptOrder.orderNumber || currentReceiptOrder.id, 'تم تأكيد الدفع - قيد التجهيز');
+      closeReceiptModal();
+      showToast('تم اعتماد تحويل فودافون كاش وتأكيد الطلب بنجاح ✓', 'success');
+    };
+
+    // 12. Local Recent Orders Chips
+    function renderLocalRecentChips() {
+      const container = document.getElementById('local-recent-orders');
+      const chipsBox = document.getElementById('recent-orders-chips');
+      if (!container || !chipsBox) return;
+
+      if (allOrders.length === 0) {
+        container.classList.add('hidden');
+        return;
+      }
+
+      container.classList.remove('hidden');
+      chipsBox.innerHTML = allOrders.slice(0, 5).map(o => `
+        <button onclick="fillSearch('${o.orderNumber || o.id}')" class="px-2.5 py-1 rounded-lg bg-surface-container hover:bg-primary-fixed text-on-surface font-mono text-[11px] font-bold border border-outline-variant/60 transition-colors">
+          #${o.orderNumber || o.id}
+        </button>
+      `).join('');
+    }
+
+    // 13. Helper: Create Sample Order for quick testing
+    window.createSampleOrder = async function() {
+      const sampleNum = 'CEL-' + Math.floor(1000 + Math.random() * 9000);
+      const sampleOrder = {
+        orderNumber: sampleNum,
+        createdAt: new Date().toISOString(),
+        status: 'قيد التجهيز الفوري',
+        paymentMethod: 'فودافون كاش (تحويل محفظة)',
+        vodafoneSender: '01012345678',
+        vodafoneReceiptImage: 'https://images.unsplash.com/photo-1554224155-8d04cb21cd6c?auto=format&fit=crop&w=600&q=80',
+        subtotal: 620,
+        shippingCost: 0,
+        tax: 93,
+        total: 713,
+        customer: {
+          fullName: 'ريم عبد العزيز الشمري',
+          phone: '0559876543',
+          address: 'شارع الملك فهد، برج اللؤلؤة، شقة 18',
+          city: 'الرياض'
+        },
+        items: [
+          {
+            id: 'abaya-chic-01',
+            title: 'عباية حرير مطرزة بقصة انسيابية',
+            price: 620,
+            quantity: 1,
+            selectedSize: 'L',
+            selectedColor: 'أسود كلاسيكي',
+            image: 'https://images.unsplash.com/photo-1583391733956-3750e0ff4e8b?auto=format&fit=crop&w=600&q=80'
+          }
+        ]
+      };
+
+      allOrders.unshift(sampleOrder);
+      localStorage.setItem('celine_store_orders', JSON.stringify(allOrders));
+
+      if (window.firebaseService && typeof window.firebaseService.createOrder === 'function') {
+        await window.firebaseService.createOrder(sampleOrder);
+      }
+
+      loadStoredOrders();
+      showToast(`تم إنشاء الطلب التجريبي #${sampleNum} بنجاح!`, 'success');
+      fillSearch(sampleNum);
+    };
+  </script>
+</body>
+</html>
