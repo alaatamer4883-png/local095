@@ -1,0 +1,923 @@
+<!DOCTYPE html>
+<html dir="rtl" lang="ar">
+<head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+  <title id="page-title">تفاصيل القطعة | سيلين للأزياء</title>
+  
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@300;400;500;600;700&family=Tajawal:wght@300;400;500;700&display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/>
+  
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            "surface": "#FAF9F6",
+            "surface-dim": "#EAE5DF",
+            "surface-container": "#F4F0EB",
+            "surface-container-low": "#F6F3EE",
+            "surface-container-high": "#EAE7E7",
+            "surface-container-highest": "#E5E2E1",
+            "surface-container-lowest": "#FFFFFF",
+            "on-surface": "#1A1A1A",
+            "on-surface-variant": "#5E584F",
+            "outline": "#807666",
+            "outline-variant": "#E5DFD7",
+            "primary": "#B38938",
+            "primary-container": "#956E1F",
+            "primary-fixed": "#FFDEA8",
+            "on-primary": "#FFFFFF",
+            "on-primary-container": "#FFFBFF",
+            "secondary-container": "#EAE5DF",
+            "on-secondary-container": "#4E4538",
+            "tertiary-fixed": "#FFDAD3",
+            "on-tertiary-fixed": "#7B3E35",
+            "error-container": "#FFDAD6",
+            "on-error-container": "#93000A",
+            "error": "#BA1A1A",
+            "inverse-surface": "#1A1A1A",
+            "inverse-on-surface": "#F3F0EF"
+          },
+          fontFamily: {
+            sans: ["'IBM Plex Sans Arabic'", "'Tajawal'", "sans-serif"],
+            serif: ["'Tajawal'", "serif"]
+          },
+          borderRadius: {
+            'sm': '8px',
+            'md': '12px',
+            'lg': '16px',
+            'xl': '24px'
+          }
+        }
+      }
+    }
+  </script>
+  
+  <!-- Custom CSS -->
+  <link rel="stylesheet" href="css/style.css"/>
+</head>
+<body class="bg-surface font-sans text-on-surface antialiased selection:bg-primary-fixed selection:text-on-surface">
+
+  <!-- ========================================================================= -->
+  <!-- SLIDE-OUT CART DRAWER                                                     -->
+  <!-- ========================================================================= -->
+  <div id="cart-drawer-backdrop" class="fixed inset-0 bg-inverse-surface/50 backdrop-blur-sm z-50 transition-opacity hidden"></div>
+  <aside id="cart-drawer-panel" class="fixed top-0 left-0 bottom-0 w-full sm:max-w-md bg-surface z-50 flex flex-col shadow-2xl">
+    <div class="flex items-center justify-between px-6 py-4 bg-surface-container-low border-b border-outline-variant">
+      <div class="flex items-center gap-2">
+        <span class="material-symbols-outlined text-primary text-2xl">shopping_bag</span>
+        <h3 class="font-bold text-lg text-on-surface">حقيبة التسوق</h3>
+        <span id="cart-items-count-label" class="px-2.5 py-0.5 rounded-full bg-secondary-container text-on-secondary-container text-xs font-semibold">0 قطع</span>
+      </div>
+      <button id="cart-drawer-close-btn" class="p-1.5 rounded-lg text-on-surface-variant hover:text-on-surface hover:bg-surface-container transition-colors" aria-label="إغلاق">
+        <span class="material-symbols-outlined">close</span>
+      </button>
+    </div>
+
+    <div class="px-6 py-3.5 bg-surface-container-lowest border-b border-outline-variant/60">
+      <div class="flex justify-between items-center mb-1.5 text-xs text-on-surface-variant font-medium">
+        <span id="cart-shipping-text">متبقي 50 ر.س للحصول على شحن مجاني!</span>
+        <span id="cart-shipping-percent" class="font-bold text-primary">80%</span>
+      </div>
+      <div class="w-full bg-surface-container-high h-2 rounded-full overflow-hidden">
+        <div id="cart-shipping-bar" class="bg-primary h-full rounded-full transition-all duration-500" style="width: 80%;"></div>
+      </div>
+    </div>
+
+    <div id="cart-drawer-items-list" class="flex-1 overflow-y-auto px-6 py-4 space-y-3.5">
+      <!-- Items dynamically populated -->
+    </div>
+
+    <div class="px-6 py-2.5 bg-surface-container-low text-center text-xs text-on-surface-variant font-medium border-t border-outline-variant/60">
+      صور حقيقية وخامات مختارة بعناية | استبدال واسترجاع بسهولة
+    </div>
+
+    <div class="px-6 py-5 bg-surface-container-lowest space-y-3 border-t border-outline-variant shadow-lg">
+      <div class="flex justify-between text-sm text-on-surface-variant">
+        <span>المجموع الفرعي:</span>
+        <span id="cart-subtotal" class="text-on-surface font-semibold">0 ر.س</span>
+      </div>
+      <div class="flex justify-between text-sm text-on-surface-variant">
+        <span>ضريبة القيمة المضافة (15%):</span>
+        <span id="cart-vat" class="text-on-surface font-semibold">0 ر.س</span>
+      </div>
+      <div class="flex justify-between text-base font-bold text-on-surface pt-2 border-t border-outline-variant/60">
+        <span>الإجمالي النهائي:</span>
+        <span id="cart-final-total" class="text-primary text-xl">0 ر.س</span>
+      </div>
+      <a href="checkout.html" class="w-full block text-center py-3.5 rounded-lg bg-primary text-on-primary font-bold text-sm hover:bg-primary-container transition-all shadow-md active:scale-98">
+        إتمام الطلب الآن
+      </a>
+    </div>
+  </aside>
+
+  <!-- ========================================================================= -->
+  <!-- MOBILE NAVIGATION DRAWER                                                  -->
+  <!-- ========================================================================= -->
+  <div id="mobile-nav-backdrop" class="fixed inset-0 bg-inverse-surface/50 backdrop-blur-sm z-50 transition-opacity hidden"></div>
+  <aside id="mobile-nav-drawer" class="fixed top-0 right-0 bottom-0 w-80 bg-surface z-50 flex flex-col shadow-2xl p-6">
+    <div class="flex items-center justify-between pb-4 border-b border-outline-variant">
+      <span class="font-bold text-xl text-primary font-serif">سيلين للأزياء</span>
+      <button id="mobile-nav-close-btn" class="p-1.5 rounded-lg text-on-surface-variant hover:text-on-surface hover:bg-surface-container transition-colors" aria-label="إغلاق">
+        <span class="material-symbols-outlined">close</span>
+      </button>
+    </div>
+    <nav class="flex flex-col gap-2 py-6 flex-1 text-right font-medium">
+      <a href="index.html" class="px-4 py-3 rounded-lg hover:bg-surface-container text-on-surface transition-colors flex items-center justify-between">
+        <span>الرئيسية</span>
+        <span class="material-symbols-outlined text-sm rtl:rotate-180">chevron_right</span>
+      </a>
+      <a href="category.html?cat=new" class="px-4 py-3 rounded-lg hover:bg-surface-container text-on-surface transition-colors flex items-center justify-between">
+        <span>وصل حديثاً</span>
+        <span class="material-symbols-outlined text-sm rtl:rotate-180">chevron_right</span>
+      </a>
+      <a href="category.html?cat=casual" class="px-4 py-3 rounded-lg hover:bg-surface-container text-on-surface transition-colors flex items-center justify-between">
+        <span>ملابس كاجوال</span>
+        <span class="material-symbols-outlined text-sm rtl:rotate-180">chevron_right</span>
+      </a>
+      <a href="category.html?cat=dresses" class="px-4 py-3 rounded-lg hover:bg-surface-container text-on-surface transition-colors flex items-center justify-between">
+        <span>فساتين ومناسبات</span>
+        <span class="material-symbols-outlined text-sm rtl:rotate-180">chevron_right</span>
+      </a>
+      <a href="category.html?cat=abayas" class="px-4 py-3 rounded-lg hover:bg-surface-container text-on-surface transition-colors flex items-center justify-between">
+        <span>عبايات ومحجبات</span>
+        <span class="material-symbols-outlined text-sm rtl:rotate-180">chevron_right</span>
+      </a>
+      <a href="about.html" class="px-4 py-3 rounded-lg hover:bg-surface-container text-on-surface transition-colors flex items-center justify-between">
+        <span>من نحن</span>
+        <span class="material-symbols-outlined text-sm rtl:rotate-180">chevron_right</span>
+      </a>
+    </nav>
+    <div class="pt-4 border-t border-outline-variant">
+      <a href="checkout.html" class="w-full flex items-center justify-center gap-2 py-3 rounded-lg bg-primary text-on-primary font-semibold text-sm">
+        <span class="material-symbols-outlined text-lg">shopping_cart_checkout</span>
+        <span>صفحة الدفع السريع</span>
+      </a>
+    </div>
+  </aside>
+
+  <!-- ========================================================================= -->
+  <!-- SEARCH MODAL OVERLAY                                                      -->
+  <!-- ========================================================================= -->
+  <div id="search-modal" class="modal-overlay">
+    <div id="search-backdrop" class="fixed inset-0"></div>
+    <div class="modal-content p-6 z-10 max-w-xl">
+      <div class="flex items-center justify-between pb-3 border-b border-outline-variant">
+        <h3 class="font-bold text-lg text-on-surface">البحث في المتجر</h3>
+        <button id="search-close-btn" class="p-1 rounded-lg text-on-surface-variant hover:text-on-surface" aria-label="إغلاق">
+          <span class="material-symbols-outlined">close</span>
+        </button>
+      </div>
+      <div class="pt-4">
+        <div class="relative">
+          <input type="text" id="search-modal-input" placeholder="ابحثي عن فستان، عباية، طقم كاجوال..." class="w-full pr-11 pl-4 py-3 rounded-xl bg-surface-container border border-outline-variant focus:outline-none focus:border-primary text-sm"/>
+          <span class="material-symbols-outlined absolute right-3.5 top-3 text-outline">search</span>
+        </div>
+      </div>
+      <div id="search-modal-results" class="mt-4 max-h-80 overflow-y-auto divide-y divide-outline-variant/50">
+        <div class="py-8 text-center text-on-surface-variant font-medium text-sm">
+          اكتبي اسم القطعة، التصنيف أو المقاس للبحث السريع...
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========================================================================= -->
+  <!-- SIZE GUIDE MODAL                                                          -->
+  <!-- ========================================================================= -->
+  <div id="size-guide-modal" class="modal-overlay">
+    <div id="size-guide-backdrop" class="fixed inset-0"></div>
+    <div class="modal-content p-6 z-10 max-w-xl text-right">
+      <div class="flex items-center justify-between pb-3 border-b border-outline-variant">
+        <div class="flex items-center gap-2">
+          <span class="material-symbols-outlined text-primary text-2xl">straighten</span>
+          <h3 class="font-bold text-lg text-on-surface">دليل المقاسات الدقيق (بالسنتيمتر)</h3>
+        </div>
+        <button id="size-guide-close-btn" class="p-1 rounded-lg text-on-surface-variant hover:text-on-surface" aria-label="إغلاق">
+          <span class="material-symbols-outlined">close</span>
+        </button>
+      </div>
+
+      <p class="text-xs text-on-surface-variant my-3 leading-relaxed">
+        للحصول على المقاس المثالي، قومي بالقياس بمحاذاة شريط القياس لجسمكِ مع ترك مسافة راحة بسيطة للتنفس والحركة.
+      </p>
+
+      <div class="overflow-x-auto rounded-lg bg-surface-container-low p-2 mb-4 border border-outline-variant/60">
+        <table class="w-full text-right text-xs">
+          <thead>
+            <tr class="bg-surface-container text-on-surface font-bold">
+              <th class="py-2 px-3">المقاس القياسي</th>
+              <th class="py-2 px-3">محيط الصدر</th>
+              <th class="py-2 px-3">محيط الخصر</th>
+              <th class="py-2 px-3">محيط الأرداف</th>
+              <th class="py-2 px-3">الطول الإجمالي</th>
+            </tr>
+          </thead>
+          <tbody class="text-on-surface-variant divide-y divide-outline-variant/40">
+            <tr>
+              <td class="py-2 px-3 font-bold text-primary">S (سمول)</td>
+              <td class="py-2 px-3">84 - 88</td>
+              <td class="py-2 px-3">66 - 70</td>
+              <td class="py-2 px-3">92 - 96</td>
+              <td class="py-2 px-3">145</td>
+            </tr>
+            <tr class="bg-surface-container-lowest/50">
+              <td class="py-2 px-3 font-bold text-primary">M (وسط)</td>
+              <td class="py-2 px-3">89 - 94</td>
+              <td class="py-2 px-3">71 - 76</td>
+              <td class="py-2 px-3">97 - 102</td>
+              <td class="py-2 px-3">146</td>
+            </tr>
+            <tr>
+              <td class="py-2 px-3 font-bold text-primary">L (كبير)</td>
+              <td class="py-2 px-3">95 - 101</td>
+              <td class="py-2 px-3">77 - 83</td>
+              <td class="py-2 px-3">103 - 109</td>
+              <td class="py-2 px-3">147</td>
+            </tr>
+            <tr class="bg-surface-container-lowest/50">
+              <td class="py-2 px-3 font-bold text-primary">XL (كبير جداً)</td>
+              <td class="py-2 px-3">102 - 108</td>
+              <td class="py-2 px-3">84 - 90</td>
+              <td class="py-2 px-3">110 - 116</td>
+              <td class="py-2 px-3">148</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="flex flex-col sm:flex-row items-center justify-between gap-3 p-3 rounded-xl bg-secondary-container/50 border border-outline-variant/60">
+        <span class="text-xs text-on-secondary-container font-medium">هل مقاسكِ يقع بين مقاسين؟ نوصي باختيار المقاس الأكبر لراحة انسيابية أكبر.</span>
+        <button id="size-guide-ok-btn" class="btn-primary text-xs py-2 px-5 whitespace-nowrap">حسناً، فهمت</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========================================================================= -->
+  <!-- TOP ANNOUNCEMENT BAR (Sticky)                                             -->
+  <!-- ========================================================================= -->
+  <div class="bg-surface-container-low text-center py-2 px-4 text-on-surface-variant text-xs sm:text-sm font-medium border-b border-outline-variant/60">
+    <span>توصيل سريع ومتابعة للطلب حتى يصلكِ | صور حقيقية وخامات مختارة بعناية</span>
+  </div>
+
+  <!-- ========================================================================= -->
+  <!-- STICKY NAVIGATION HEADER                                                  -->
+  <!-- ========================================================================= -->
+  <header class="sticky top-0 z-40 w-full glass-nav shadow-sm transition-all duration-300">
+    <div class="max-w-7xl mx-auto h-20 px-4 sm:px-6 lg:px-8 flex items-center justify-between">
+      
+      <!-- Brand Logo on the Right in RTL -->
+      <div class="flex items-center gap-3">
+        <button id="mobile-menu-toggle-btn" class="lg:hidden p-2 rounded-lg text-on-surface-variant hover:text-on-surface hover:bg-surface-container transition-colors" aria-label="القائمة">
+          <span class="material-symbols-outlined text-2xl">menu</span>
+        </button>
+        <a href="index.html" class="flex flex-col text-right">
+          <span class="font-serif text-2xl sm:text-3xl tracking-tight text-primary font-bold">سيلين للأزياء</span>
+          <span class="text-[10px] tracking-widest text-outline -mt-1 font-sans">CELINE COUTURE</span>
+        </a>
+      </div>
+
+      <!-- Center Navigation Links -->
+      <nav class="hidden lg:flex items-center gap-1.5 font-medium text-sm">
+        <a href="category.html?cat=new" data-path="new-arrivals" class="px-3.5 py-2 text-on-surface-variant hover:text-on-surface hover:bg-surface-container rounded-lg transition-colors">
+          وصل حديثاً
+        </a>
+        <a href="category.html?cat=casual" data-path="casual-wear" class="px-3.5 py-2 text-on-surface-variant hover:text-on-surface hover:bg-surface-container rounded-lg transition-colors">
+          ملابس كاجوال
+        </a>
+        <a href="category.html?cat=dresses" data-path="dresses-occasions" class="px-3.5 py-2 text-on-surface-variant hover:text-on-surface hover:bg-surface-container rounded-lg transition-colors">
+          فساتين ومناسبات
+        </a>
+        <a href="category.html?cat=abayas" data-path="abayas-modest" class="px-3.5 py-2 text-on-surface-variant hover:text-on-surface hover:bg-surface-container rounded-lg transition-colors">
+          عبايات ومحجبات
+        </a>
+        <a href="about.html" data-path="about-us" class="px-3.5 py-2 text-on-surface-variant hover:text-on-surface hover:bg-surface-container rounded-lg transition-colors">
+          من نحن
+        </a>
+      </nav>
+
+      <!-- Action Icons on the Left in RTL -->
+      <div class="flex items-center gap-1 sm:gap-2">
+        <button data-action="open-search" class="p-2.5 text-on-surface-variant hover:text-on-surface hover:bg-surface-container rounded-full transition-colors" title="بحث">
+          <span class="material-symbols-outlined text-xl">search</span>
+        </button>
+        <a href="category.html?wishlist=true" class="relative p-2.5 text-on-surface-variant hover:text-on-surface hover:bg-surface-container rounded-full transition-colors" title="قائمة الأمنيات">
+          <span class="material-symbols-outlined text-xl">favorite</span>
+          <span class="header-wishlist-badge absolute top-1 left-1 w-4 h-4 rounded-full bg-primary text-white text-[10px] font-bold flex items-center justify-center">3</span>
+        </a>
+        <button data-action="open-cart" class="relative p-2.5 text-on-surface-variant hover:text-on-surface hover:bg-surface-container rounded-full transition-colors" title="حقيبة التسوق">
+          <span class="material-symbols-outlined text-xl">shopping_bag</span>
+          <span class="header-cart-badge absolute top-1 left-1 w-4 h-4 rounded-full bg-primary text-white text-[10px] font-bold flex items-center justify-center">2</span>
+        </button>
+        <a href="about.html" class="p-1 text-on-surface-variant hover:text-on-surface mr-1" title="حسابي">
+          <img src="https://lh3.googleusercontent.com/aida/ALJJyrCHbungSpLphKdTtfYzqERsxo0es8I92Z9Sl-eCqzCICjJbESI6epOE9XxaLYy7i_s4H45nhBMttLKKMXuHETFNdfd0lE5K1dPHfnKYEmE0zuhvwf6iGRIwjG-5NzlO_idPIkG3waytJBZc3OWBQkEF44MusjYk6V_WUOGd7hrbPxcWsXV1Qd9YnZJL8fP7HH7RxD9IMN6knqHlWbggg7Hv3yIrwLrrxUlF6WZuVfFe" alt="Profile" class="w-8 h-8 rounded-full object-cover ring-1 ring-outline-variant"/>
+        </a>
+      </div>
+
+    </div>
+  </header>
+
+  <main class="w-full flex-1 pb-16">
+    
+    <!-- Breadcrumbs -->
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+      <nav class="flex items-center gap-1.5 text-xs text-on-surface-variant">
+        <a href="index.html" class="hover:text-primary transition-colors">الرئيسية</a>
+        <span class="material-symbols-outlined text-xs rtl:rotate-180">chevron_left</span>
+        <a href="category.html" id="breadcrumb-category" class="hover:text-primary transition-colors">فساتين ومناسبات</a>
+        <span class="material-symbols-outlined text-xs rtl:rotate-180">chevron_left</span>
+        <span id="breadcrumb-title" class="text-on-surface font-semibold truncate max-w-xs">فستان سهرة انسيابي راقٍ</span>
+      </nav>
+    </div>
+
+    <!-- Main 2-Column Product Showcase Section -->
+    <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-start">
+        
+        <!-- Right Column (Desktop Cols 1-7 in RTL): Interactive Multi-Angle Gallery -->
+        <div class="lg:col-span-7 flex flex-col-reverse md:flex-row gap-4 lg:sticky lg:top-24">
+          
+          <!-- Thumbnails Column -->
+          <div id="gallery-thumbs-container" class="flex md:flex-col gap-2.5 overflow-x-auto md:overflow-visible shrink-0 pb-2 md:pb-0">
+            <!-- Thumbnails injected via JS -->
+          </div>
+
+          <!-- Main Display Frame with Zoom & Badges -->
+          <div id="pdp-zoom-frame" class="zoomable-container relative flex-1 rounded-2xl bg-surface-container overflow-hidden group shadow-md aspect-[3/4] max-h-[720px]">
+            <img id="pdp-main-image" src="" alt="" class="w-full h-full object-cover"/>
+            
+            <!-- Scarcity Badge (Top Right in RTL) -->
+            <div id="pdp-scarcity-badge-container" class="absolute top-4 right-4 z-10 flex items-center gap-1.5 bg-tertiary-fixed/95 backdrop-blur-md text-on-tertiary-fixed px-3 py-1.5 rounded-full shadow-sm">
+              <span class="w-2 h-2 rounded-full bg-error animate-ping"></span>
+              <span id="pdp-scarcity-text" class="text-xs font-bold">كمية محدودة جداً – احجزي قطعتكِ قبل نفاد المخزون</span>
+            </div>
+
+            <!-- Interaction Badges (Top Left in RTL) -->
+            <div class="absolute top-4 left-4 z-10 flex flex-col gap-2">
+              <div class="flex items-center gap-1 bg-white/90 backdrop-blur-md text-on-surface px-2.5 py-1 rounded-full shadow-sm text-xs font-medium">
+                <span class="material-symbols-outlined text-primary text-sm">360</span>
+                <span>عرض 360°</span>
+              </div>
+              <div class="hidden md:flex items-center gap-1 bg-white/90 backdrop-blur-md text-on-surface px-2.5 py-1 rounded-full shadow-sm text-xs font-medium">
+                <span class="material-symbols-outlined text-primary text-sm">zoom_in</span>
+                <span>مرري للتقريب</span>
+              </div>
+            </div>
+
+            <!-- Provenance Strip -->
+            <div class="absolute bottom-0 inset-x-0 bg-gradient-to-t from-inverse-surface/70 via-inverse-surface/20 to-transparent p-4 flex items-end justify-between text-white">
+              <div class="flex items-center gap-1.5 text-xs font-medium">
+                <span class="material-symbols-outlined text-primary-fixed text-sm">verified</span>
+                <span>تصوير حي أصلي وخامات غير معدّلة</span>
+              </div>
+              <span class="text-[11px] tracking-wider opacity-80 uppercase">Céline Atelier</span>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Left Column (Desktop Cols 8-12 in RTL): Product Details & Conversion Engine -->
+        <div class="lg:col-span-5 flex flex-col space-y-6">
+          
+          <!-- Category Pill & Title -->
+          <div class="space-y-2 text-right">
+            <div class="flex items-center justify-between">
+              <span id="pdp-category-pill" class="px-3 py-1 rounded-full bg-secondary-container text-on-secondary-container text-xs font-semibold tracking-wider">
+                مجموعة السهرة الحصرية
+              </span>
+              <!-- Rating Pill -->
+              <div class="flex items-center gap-1 bg-surface-container px-3 py-1 rounded-full">
+                <div class="flex text-primary">
+                  <span class="material-symbols-outlined text-xs fill">star</span>
+                  <span class="material-symbols-outlined text-xs fill">star</span>
+                  <span class="material-symbols-outlined text-xs fill">star</span>
+                  <span class="material-symbols-outlined text-xs fill">star</span>
+                  <span class="material-symbols-outlined text-xs fill">star</span>
+                </div>
+                <span id="pdp-rating-val" class="text-xs font-bold text-on-surface">4.9</span>
+                <span id="pdp-reviews-count" class="text-[11px] text-on-surface-variant">(128 تقييم موثق)</span>
+              </div>
+            </div>
+
+            <h1 id="pdp-title" class="text-2xl sm:text-3xl font-medium text-on-surface leading-snug">
+              فستان سهرة انسيابي راقٍ
+            </h1>
+
+            <p id="pdp-short-desc" class="text-sm text-on-surface-variant leading-relaxed">
+              قطعة استثنائية صُممت بعناية لتحاكي نعومة الحرير مع ثنيات انسيابية تمنح القوام رشاقة وأناقة ملكية تناسب أرقى المناسبات الشرقية والغربية.
+            </p>
+          </div>
+
+          <!-- Pricing & Installments Engine -->
+          <div class="p-4 rounded-2xl bg-surface-container-low space-y-3 border border-outline-variant/60 shadow-sm text-right">
+            <div class="flex items-baseline gap-2">
+              <span id="pdp-price" class="text-3xl font-bold text-primary">580</span>
+              <span class="text-sm font-bold text-primary">ر.س</span>
+              <span id="pdp-original-price" class="text-sm text-outline line-through mr-2">740 ر.س</span>
+              <span id="pdp-discount-badge" class="px-2 py-0.5 rounded bg-error-container text-on-error-container text-xs font-bold">خصم ٢١٪</span>
+            </div>
+
+            <div class="p-3 rounded-xl bg-surface-container-lowest flex items-start gap-3 border border-outline-variant/40">
+              <span class="material-symbols-outlined text-primary-container text-xl mt-0.5">credit_score</span>
+              <div class="flex-1 text-right">
+                <p class="text-xs text-on-surface leading-snug font-medium">
+                  أو قسّمي فاتورتكِ على <span id="pdp-installment-val" class="font-bold text-primary">4 دفعات ميسرة بقيمة 145 ر.س</span> بدون أي فوائد أو رسوم خفية.
+                </p>
+                <div class="flex items-center gap-2 mt-2">
+                  <span class="px-2 py-0.5 rounded bg-secondary-container text-[11px] font-bold text-on-secondary-container">تابي (Tabby)</span>
+                  <span class="px-2 py-0.5 rounded bg-secondary-container text-[11px] font-bold text-on-secondary-container">تمارا (Tamara)</span>
+                  <span class="text-on-surface-variant text-[11px] mr-1">متوافق مع الشريعة الإسلامية</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Color Swatch Selector -->
+          <div class="space-y-2 text-right">
+            <div class="flex items-center justify-between text-xs">
+              <span class="text-on-surface-variant">
+                اللون المختار: <strong id="pdp-selected-color-name" class="text-on-surface font-bold">شامبين دافئ</strong>
+              </span>
+              <span class="text-primary font-semibold">اللون الأكثر طلباً</span>
+            </div>
+            <div id="pdp-color-swatches" class="flex items-center gap-3 pt-1">
+              <!-- Swatches injected via JS -->
+            </div>
+          </div>
+
+          <!-- Size Selector with Availability & Size Guide Modal Trigger -->
+          <div class="space-y-2 text-right">
+            <div class="flex items-center justify-between text-xs">
+              <span class="text-on-surface-variant font-medium">اختاري المقاس المناسب:</span>
+              <button id="open-size-guide-btn" class="inline-flex items-center gap-1 text-primary hover:text-primary-container font-semibold transition-colors">
+                <span class="material-symbols-outlined text-sm">straighten</span>
+                <span class="underline underline-offset-4">دليل المقاسات</span>
+              </button>
+            </div>
+            <div id="pdp-size-options" class="grid grid-cols-4 gap-2 pt-1">
+              <!-- Sizes injected via JS -->
+            </div>
+          </div>
+
+          <!-- Conversion Actions -->
+          <div class="space-y-3 pt-2">
+            <button id="pdp-add-to-cart-btn" class="w-full py-4 px-6 rounded-xl bg-primary hover:bg-primary-container text-white font-bold text-base flex items-center justify-center gap-2 shadow-lg transition-all active:scale-98">
+              <span class="material-symbols-outlined text-xl">shopping_bag</span>
+              <span id="pdp-add-cart-text">أضيفيها إلى حقيبتكِ الآن – 580 ر.س</span>
+            </button>
+
+            <div class="grid grid-cols-2 gap-3">
+              <a href="checkout.html" class="py-3 px-4 rounded-xl bg-surface-container hover:bg-surface-container-high text-on-surface font-semibold text-xs flex items-center justify-center gap-1.5 transition-colors">
+                <span class="material-symbols-outlined text-base">bolt</span>
+                <span>شراء سريع بنقرة واحدة</span>
+              </a>
+              <button id="pdp-wishlist-btn" class="py-3 px-4 rounded-xl bg-surface-container hover:bg-surface-container-high text-on-surface font-semibold text-xs flex items-center justify-center gap-1.5 transition-colors">
+                <span class="material-symbols-outlined text-base transition-colors">favorite</span>
+                <span>أضيفي للمفضلة</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Trust Badges Box -->
+          <div class="p-4 rounded-2xl bg-surface-container-low grid grid-cols-1 sm:grid-cols-2 gap-3 border border-outline-variant/60 text-right">
+            <div class="flex items-center gap-3 p-2 rounded-xl bg-surface-container-lowest">
+              <span class="material-symbols-outlined text-primary text-2xl">verified_user</span>
+              <div>
+                <p class="font-bold text-xs text-on-surface">صور حقيقية وخامات مختارة</p>
+                <p class="text-[11px] text-on-surface-variant">القطعة مطابقة للصور تماماً</p>
+              </div>
+            </div>
+            <div class="flex items-center gap-3 p-2 rounded-xl bg-surface-container-lowest">
+              <span class="material-symbols-outlined text-primary text-2xl">published_with_changes</span>
+              <div>
+                <p class="font-bold text-xs text-on-surface">ضمان مطابقة المقاس والجودة</p>
+                <p class="text-[11px] text-on-surface-variant">استبدال سهل ومجاني للمقاسات</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Expandable Detail Accordions -->
+          <div class="space-y-2 pt-2 text-right">
+            
+            <!-- Accordion 1: Fabric & Care -->
+            <details class="group bg-surface-container-low rounded-xl overflow-hidden border border-outline-variant/60" open>
+              <summary class="flex items-center justify-between p-4 cursor-pointer select-none font-bold text-sm text-on-surface hover:bg-surface-container transition-colors">
+                <span class="flex items-center gap-2">
+                  <span class="material-symbols-outlined text-primary text-xl">checkroom</span>
+                  <span>تفاصيل الخامة وطريقة الغسيل</span>
+                </span>
+                <span class="material-symbols-outlined text-outline transition-transform duration-200 group-open:rotate-180">expand_more</span>
+              </summary>
+              <div class="p-4 pt-0 text-on-surface-variant text-xs leading-relaxed space-y-2">
+                <p id="pdp-fabric-desc">مصنوع من حرير الباريس المعالج بلمعان دافئ وناعم غير شفاف، مع بطانة داخلية خفيفة وقابلة للتنفس من خيوط الفيسكوز الفاخر لتوفير انسيابية وراحة مطلقة طوال الأمسية.</p>
+                <ul id="pdp-care-list" class="list-disc list-inside space-y-1 text-on-surface font-medium">
+                  <li>يُغسل يدوياً بماء بارد وبشامبو خاص بالأقمشة الحساسة، أو عبر التنظيف الجاف (Dry Clean).</li>
+                  <li>يُمنع استخدام المبيضات أو التجفيف الآلي بالحرارة العالية.</li>
+                  <li>يُكوى بالبخار الرأسي بدرجة حرارة منخفضة للحفاظ على لمعان النسيج.</li>
+                </ul>
+              </div>
+            </details>
+
+            <!-- Accordion 2: Styling Tips -->
+            <details class="group bg-surface-container-low rounded-xl overflow-hidden border border-outline-variant/60">
+              <summary class="flex items-center justify-between p-4 cursor-pointer select-none font-bold text-sm text-on-surface hover:bg-surface-container transition-colors">
+                <span class="flex items-center gap-2">
+                  <span class="material-symbols-outlined text-primary text-xl">auto_awesome</span>
+                  <span>كيف ومتى ترتدين هذه القطعة</span>
+                </span>
+                <span class="material-symbols-outlined text-outline transition-transform duration-200 group-open:rotate-180">expand_more</span>
+              </summary>
+              <div class="p-4 pt-0 text-on-surface-variant text-xs leading-relaxed space-y-2">
+                <p><strong>المناسبات الملائمة:</strong> حفلات الخطوبة، العشاء الرسمي الفاخر، ومناسبات الأعياد والمواسم الراقية.</p>
+                <p id="pdp-styling-tips"><strong>نصيحة المنسقة:</strong> لإطلالة ملكية متكاملة، نسقيه مع أقراط متدلية من الذهب الأصفر ولؤلؤ باروكي، وحذاء كعب عالي بتدرجات النيود أو الذهبي المات، مع حقيبة كلاتش صغيرة بلون الشامبين.</p>
+              </div>
+            </details>
+
+            <!-- Accordion 3: Delivery & Returns -->
+            <details class="group bg-surface-container-low rounded-xl overflow-hidden border border-outline-variant/60">
+              <summary class="flex items-center justify-between p-4 cursor-pointer select-none font-bold text-sm text-on-surface hover:bg-surface-container transition-colors">
+                <span class="flex items-center gap-2">
+                  <span class="material-symbols-outlined text-primary text-xl">local_shipping</span>
+                  <span>سياسة الشحن، الاستبدال والاسترجاع</span>
+                </span>
+                <span class="material-symbols-outlined text-outline transition-transform duration-200 group-open:rotate-180">expand_more</span>
+              </summary>
+              <div class="p-4 pt-0 text-on-surface-variant text-xs leading-relaxed space-y-2">
+                <div class="flex items-start gap-2">
+                  <span class="material-symbols-outlined text-primary text-base mt-0.5">schedule</span>
+                  <p>توصيل فوري خلال 24-48 ساعة داخل الرياض وجدة، وخلال 2-4 أيام عمل لكافة مدن المملكة ودول الخليج العربي.</p>
+                </div>
+                <div class="flex items-start gap-2">
+                  <span class="material-symbols-outlined text-primary text-base mt-0.5">replay</span>
+                  <p>استبدال واسترجاع مجاني وميسر خلال 7 أيام من تاريخ استلام الطلب من باب منزلك وبدون تعقيدات.</p>
+                </div>
+              </div>
+            </details>
+
+          </div>
+
+        </div>
+
+      </div>
+    </section>
+
+    <!-- Complete the Look / You May Also Like Section -->
+    <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-16">
+      <div class="flex flex-col md:flex-row md:items-end justify-between mb-8 gap-2 text-right">
+        <div>
+          <span class="text-xs font-bold text-primary block mb-1">تنسيق متناسق ومتقن</span>
+          <h2 class="text-2xl font-bold text-on-surface">قطع تكمل إطلالتكِ</h2>
+        </div>
+        <a href="category.html" class="inline-flex items-center gap-1 text-primary text-xs font-bold hover:underline">
+          <span>استكشفي تشكيلة الإكسسوارات الكاملة</span>
+          <span class="material-symbols-outlined text-sm rtl:rotate-180">arrow_right_alt</span>
+        </a>
+      </div>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        
+        <!-- Cross-sell 1: Abaya Cloak -->
+        <div class="group flex flex-col bg-surface-container-low rounded-2xl overflow-hidden border border-outline-variant/60 shadow-sm hover:shadow-md transition-all">
+          <a href="product.html?id=abaya-cloak" class="relative aspect-[3/4] overflow-hidden bg-surface-container block">
+            <img src="https://lh3.googleusercontent.com/aida-public/AB6AXuAW0DKa3aBblFEQE0K1_SWj4_ee61mA6x6xnF5E7aUkN9zRKTX20QNyBX4vmYxk82b3ugJkfxHT5Oe3i9GfIprNwwsTCiRx87_dQRaEslN8LHelxTSej0q8Gi3QjkkUsIo-aSWNzYY5W2x1hTGo9NGzljsRvnsaRz0IZrucJ4YIZ8MLJrDxeqW9vjhnQh7icgFBIn6dHYW0bbQbits6XTlSNu58o8XPnPFlM80zfPg" 
+                 alt="كاب أورجانزا شفاف مطرز" 
+                 class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"/>
+            <span class="absolute top-3 right-3 bg-white/90 backdrop-blur-sm text-on-surface text-[11px] font-bold px-2.5 py-0.5 rounded-full shadow-sm">تنسيق مثالي</span>
+          </a>
+          <div class="p-4 flex flex-col flex-1 justify-between gap-3 text-right">
+            <div>
+              <span class="text-[11px] text-on-surface-variant block mb-1">عبايات ومحجبات</span>
+              <a href="product.html?id=abaya-cloak" class="font-bold text-sm text-on-surface hover:text-primary transition-colors block">
+                كاب أورجانزا شفاف مطرز بالخيوط الذهبية
+              </a>
+            </div>
+            <div class="flex items-center justify-between pt-2 border-t border-outline-variant/50">
+              <span class="text-base font-bold text-primary">390 ر.س</span>
+              <button data-quick-add="abaya-cloak" class="p-2 rounded-lg bg-surface-container hover:bg-primary hover:text-white transition-colors" title="إضافة للحقيبة">
+                <span class="material-symbols-outlined text-base">add_shopping_cart</span>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Cross-sell 2: Pearl Earrings -->
+        <div class="group flex flex-col bg-surface-container-low rounded-2xl overflow-hidden border border-outline-variant/60 shadow-sm hover:shadow-md transition-all">
+          <a href="product.html?id=pearl-earrings" class="relative aspect-[3/4] overflow-hidden bg-surface-container block">
+            <img src="https://lh3.googleusercontent.com/aida-public/AB6AXuBQw7TtHWDMA14mP0tQzCcECmL2Pu1WORPJ0NrKBpMwQ1ZPUmKfC-WvIanu2Yp09JQ0DygyaAWfNuJwpugclWA4CBgIPD34ZlBW9sEzBq1KyzZ0dq7X1NNQRWqwkAvMFgrv47_WVWkyt5XJY9vTxYFKxYWxomVbrQLg__275z4OyYYh5a0D1NUPe6yLc3j-2dWXIZABOivvgEP8XggL9EAEE3SHeHwkaE3YTrX-CqQ" 
+                 alt="أقراط لؤلؤ باروكي" 
+                 class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"/>
+            <span class="absolute top-3 right-3 bg-white/90 backdrop-blur-sm text-on-surface text-[11px] font-bold px-2.5 py-0.5 rounded-full shadow-sm">مجوهرات راقية</span>
+          </a>
+          <div class="p-4 flex flex-col flex-1 justify-between gap-3 text-right">
+            <div>
+              <span class="text-[11px] text-on-surface-variant block mb-1">إكسسوارات</span>
+              <a href="product.html?id=pearl-earrings" class="font-bold text-sm text-on-surface hover:text-primary transition-colors block">
+                أقراط لؤلؤ باروكي مطلي بالذهب عيار 18
+              </a>
+            </div>
+            <div class="flex items-center justify-between pt-2 border-t border-outline-variant/50">
+              <span class="text-base font-bold text-primary">220 ر.س</span>
+              <button data-quick-add="pearl-earrings" class="p-2 rounded-lg bg-surface-container hover:bg-primary hover:text-white transition-colors" title="إضافة للحقيبة">
+                <span class="material-symbols-outlined text-base">add_shopping_cart</span>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Cross-sell 3: Metallic Clutch -->
+        <div class="group flex flex-col bg-surface-container-low rounded-2xl overflow-hidden border border-outline-variant/60 shadow-sm hover:shadow-md transition-all">
+          <a href="product.html?id=clutch" class="relative aspect-[3/4] overflow-hidden bg-surface-container block">
+            <img src="https://lh3.googleusercontent.com/aida-public/AB6AXuDciPmSbjjVnibqOhhMOu9FjMH19INtI0AKXD7iBpn7vxvHBMNKsAn_Oa3QMB2OdDrWmE-okmB2GWiZ3maym0w_cxqH_1-K_j6imkuV6-vm6JcAOiAgorrcphQkHEjU3Ar2NJ6gXfdGBooi7j4aGbsf7ckLf5-FkW-zzdlEFCnbAPcLh3Ps3apP6RaZnfenc6dc0GI8sBjQx_HNTxQzmS8nBZHrbIHDxJpErsV5AWQ" 
+                 alt="حقيبة كلاتش ميتاليك" 
+                 class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"/>
+            <span class="absolute top-3 right-3 bg-white/90 backdrop-blur-sm text-on-surface text-[11px] font-bold px-2.5 py-0.5 rounded-full shadow-sm">حقائب سهرة</span>
+          </a>
+          <div class="p-4 flex flex-col flex-1 justify-between gap-3 text-right">
+            <div>
+              <span class="text-[11px] text-on-surface-variant block mb-1">حقائب</span>
+              <a href="product.html?id=clutch" class="font-bold text-sm text-on-surface hover:text-primary transition-colors block">
+                حقيبة كلاتش ميتاليك بلمعان ذهبي ناعم
+              </a>
+            </div>
+            <div class="flex items-center justify-between pt-2 border-t border-outline-variant/50">
+              <span class="text-base font-bold text-primary">285 ر.س</span>
+              <button data-quick-add="clutch" class="p-2 rounded-lg bg-surface-container hover:bg-primary hover:text-white transition-colors" title="إضافة للحقيبة">
+                <span class="material-symbols-outlined text-base">add_shopping_cart</span>
+              </button>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ========================================================================= -->
+  <!-- STICKY MOBILE BOTTOM CTA BAR                                              -->
+  <!-- ========================================================================= -->
+  <div class="sticky bottom-0 z-30 w-full glass-nav shadow-[0_-4px_24px_rgba(0,0,0,0.08)] py-3 px-4 sm:px-6">
+    <div class="max-w-7xl mx-auto flex items-center justify-between gap-4">
+      <div class="flex items-center gap-3 min-w-0 text-right">
+        <div class="w-12 h-14 rounded-lg bg-surface-container overflow-hidden shrink-0 hidden sm:block">
+          <img id="sticky-bar-img" src="" alt="" class="w-full h-full object-cover"/>
+        </div>
+        <div class="truncate">
+          <h4 id="sticky-bar-title" class="font-bold text-xs sm:text-sm text-on-surface truncate">فستان سهرة انسيابي</h4>
+          <div class="flex items-baseline gap-1">
+            <span id="sticky-bar-price" class="font-bold text-primary text-sm sm:text-base">580</span>
+            <span class="text-xs text-primary font-semibold">ر.س</span>
+            <span class="text-[11px] text-on-surface-variant mr-1">(شحن مجاني)</span>
+          </div>
+        </div>
+      </div>
+      <div class="flex items-center gap-2 shrink-0">
+        <div class="hidden md:flex items-center gap-1 bg-surface-container px-3 py-1 rounded-lg text-xs">
+          <span class="text-on-surface-variant">المقاس:</span>
+          <span id="sticky-selected-size-label" class="text-primary font-bold">S</span>
+        </div>
+        <button id="sticky-add-to-cart-btn" class="btn-primary text-xs sm:text-sm py-3 px-5 whitespace-nowrap">
+          <span class="material-symbols-outlined text-base">shopping_bag</span>
+          <span>أضيفيها إلى حقيبتكِ الآن</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MULTI-COLUMN FOOTER -->
+  <footer class="w-full bg-surface-container-low pt-16 pb-12 border-t border-outline-variant/80">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
+      <div class="p-6 sm:p-8 rounded-2xl bg-surface-container flex flex-col md:flex-row items-center justify-between gap-6 border border-outline-variant/60 shadow-sm">
+        <div class="flex items-center gap-4 text-right">
+          <div class="w-14 h-14 rounded-2xl bg-primary text-white flex items-center justify-center flex-shrink-0 shadow-md">
+            <span class="material-symbols-outlined text-3xl">chat</span>
+          </div>
+          <div>
+            <h4 class="font-bold text-base sm:text-lg text-on-surface">محتارة في المقاس أو التنسيق؟</h4>
+            <p class="text-xs sm:text-sm text-on-surface-variant mt-0.5">راسلينا وسنساعدكِ بكل سرور لاختيار المقاس المثالي وتنسيق قطعكِ</p>
+          </div>
+        </div>
+        <a href="https://wa.me/966500000000" target="_blank" class="btn-primary text-xs sm:text-sm whitespace-nowrap">
+          <span class="material-symbols-outlined text-lg">forum</span>
+          <span>محادثة واتساب مباشرة</span>
+        </a>
+      </div>
+      <div class="pt-6 border-t border-outline-variant/60 text-center text-xs text-on-surface-variant">
+        <p>© 2025 سيلين للأزياء. جميع الحقوق محفوظة.</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="js/products-data.js"></script>
+  <script src="js/cart.js"></script>
+  <script src="js/main.js"></script>
+  
+  <!-- PDP Specific Interactive Script -->
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      // 1. Get Product ID from URL
+      const urlParams = new URLSearchParams(window.location.search);
+      const productId = urlParams.get('id') || 'dress';
+      const product = getProductById(productId);
+
+      let currentSelectedSize = product.defaultSize || product.sizes[0];
+      let currentSelectedColor = product.defaultColor || product.colors[0].name;
+
+      // 2. Populate Product Data
+      document.getElementById('page-title').textContent = `${product.title} | سيلين للأزياء`;
+      document.getElementById('breadcrumb-title').textContent = product.title;
+      document.getElementById('breadcrumb-category').textContent = product.category;
+      document.getElementById('breadcrumb-category').href = `category.html?cat=${product.categorySlug}`;
+
+      document.getElementById('pdp-category-pill').textContent = product.category;
+      document.getElementById('pdp-title').textContent = product.title;
+      document.getElementById('pdp-short-desc').textContent = product.longDescription || product.description;
+      document.getElementById('pdp-price').textContent = product.price;
+      
+      const origPriceEl = document.getElementById('pdp-original-price');
+      const discountEl = document.getElementById('pdp-discount-badge');
+      if (product.originalPrice) {
+        origPriceEl.textContent = `${product.originalPrice} ر.س`;
+        origPriceEl.style.display = 'inline';
+        const percent = Math.round(((product.originalPrice - product.price) / product.originalPrice) * 100);
+        discountEl.textContent = `خصم ${percent}%`;
+        discountEl.style.display = 'inline-block';
+      } else {
+        origPriceEl.style.display = 'none';
+        discountEl.style.display = 'none';
+      }
+
+      // Installment 4x calculation
+      const installmentVal = Math.round(product.price / 4);
+      document.getElementById('pdp-installment-val').textContent = `4 دفعات ميسرة بقيمة ${installmentVal} ر.س`;
+      document.getElementById('pdp-add-cart-text').textContent = `أضيفيها إلى حقيبتكِ الآن – ${product.price} ر.س`;
+
+      // Sticky bar
+      document.getElementById('sticky-bar-title').textContent = product.title;
+      document.getElementById('sticky-bar-price').textContent = product.price;
+      document.getElementById('sticky-bar-img').src = product.image;
+      document.getElementById('sticky-selected-size-label').textContent = currentSelectedSize;
+
+      // Scarcity text
+      if (product.scarcityBadge) {
+        document.getElementById('pdp-scarcity-text').textContent = product.scarcityBadge;
+      }
+
+      // Fabric & Care
+      if (product.fabric) {
+        document.getElementById('pdp-fabric-desc').textContent = product.fabric;
+      }
+      if (product.stylingTips) {
+        document.getElementById('pdp-styling-tips').textContent = product.stylingTips;
+      }
+      if (product.careInstructions) {
+        const careList = document.getElementById('pdp-care-list');
+        careList.innerHTML = product.careInstructions.map(c => `<li>${c}</li>`).join('');
+      }
+
+      // 3. Render Image Gallery
+      const mainImg = document.getElementById('pdp-main-image');
+      mainImg.src = product.image;
+      mainImg.alt = product.title;
+
+      const galleryContainer = document.getElementById('gallery-thumbs-container');
+      const galleryList = (product.gallery && product.gallery.length > 0) ? product.gallery : [
+        { url: product.image, label: "الأمامي", alt: product.title },
+        { url: product.hoverImage || product.image, label: "الخلفي", alt: product.title }
+      ];
+
+      galleryContainer.innerHTML = galleryList.map((item, idx) => `
+        <button type="button" class="thumb-btn relative w-16 h-20 md:w-20 md:h-28 rounded-xl overflow-hidden bg-surface-container transition-all ${idx === 0 ? 'ring-2 ring-primary shadow-sm' : 'opacity-75 hover:opacity-100'}" data-img-url="${item.url}">
+          <img src="${item.url}" alt="${item.alt}" class="w-full h-full object-cover"/>
+          <span class="absolute bottom-1 right-1 text-[9px] bg-inverse-surface/80 text-white px-1.5 py-0.5 rounded font-medium">${item.label}</span>
+        </button>
+      `).join('');
+
+      // Bind thumb clicks
+      const thumbBtns = galleryContainer.querySelectorAll('.thumb-btn');
+      thumbBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+          thumbBtns.forEach(b => {
+            b.classList.remove('ring-2', 'ring-primary', 'shadow-sm');
+            b.classList.add('opacity-75');
+          });
+          btn.classList.remove('opacity-75');
+          btn.classList.add('ring-2', 'ring-primary', 'shadow-sm');
+          mainImg.src = btn.getAttribute('data-img-url');
+        });
+      });
+
+      // 4. Image Zoom on Hover / Move
+      const zoomFrame = document.getElementById('pdp-zoom-frame');
+      if (zoomFrame) {
+        zoomFrame.addEventListener('mousemove', (e) => {
+          if (window.innerWidth < 768) return;
+          const rect = zoomFrame.getBoundingClientRect();
+          const x = ((e.clientX - rect.left) / rect.width) * 100;
+          const y = ((e.clientY - rect.top) / rect.height) * 100;
+          mainImg.style.transformOrigin = `${x}% ${y}%`;
+          mainImg.style.transform = 'scale(1.7)';
+        });
+        zoomFrame.addEventListener('mouseleave', () => {
+          mainImg.style.transformOrigin = 'center center';
+          mainImg.style.transform = 'scale(1)';
+        });
+      }
+
+      // 5. Render Color Swatches
+      const colorContainer = document.getElementById('pdp-color-swatches');
+      const colorLabel = document.getElementById('pdp-selected-color-name');
+      colorLabel.textContent = currentSelectedColor;
+
+      colorContainer.innerHTML = product.colors.map((c, idx) => `
+        <button type="button" class="w-10 h-10 rounded-full p-0.5 ring-offset-2 ring-offset-surface transition-all flex items-center justify-center ${idx === 0 ? 'ring-2 ring-primary' : 'ring-1 ring-outline-variant hover:ring-outline'}" data-color-name="${c.name}" title="${c.name}">
+          <span class="w-full h-full rounded-full shadow-inner" style="background-color: ${c.hex};"></span>
+        </button>
+      `).join('');
+
+      const colorBtns = colorContainer.querySelectorAll('button');
+      colorBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+          colorBtns.forEach(b => {
+            b.className = 'w-10 h-10 rounded-full p-0.5 ring-1 ring-outline-variant hover:ring-outline ring-offset-2 ring-offset-surface transition-all flex items-center justify-center';
+          });
+          btn.className = 'w-10 h-10 rounded-full p-0.5 ring-2 ring-primary ring-offset-2 ring-offset-surface transition-all flex items-center justify-center';
+          currentSelectedColor = btn.getAttribute('data-color-name');
+          colorLabel.textContent = currentSelectedColor;
+        });
+      });
+
+      // 6. Render Size Selector
+      const sizeContainer = document.getElementById('pdp-size-options');
+      sizeContainer.innerHTML = product.sizes.map((s, idx) => `
+        <button type="button" class="pdp-size-btn flex flex-col items-center justify-center py-2.5 px-2 rounded-xl bg-surface-container-lowest font-medium text-xs transition-all ${s === currentSelectedSize ? 'ring-2 ring-primary text-primary font-bold shadow-sm' : 'hover:bg-surface-container text-on-surface border border-outline-variant/60'}" data-size-val="${s}">
+          <span class="text-sm">${s}</span>
+          <span class="text-[10px] text-on-surface-variant font-normal">متوفر</span>
+        </button>
+      `).join('');
+
+      const sizeBtns = sizeContainer.querySelectorAll('.pdp-size-btn');
+      sizeBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+          sizeBtns.forEach(b => {
+            b.className = 'pdp-size-btn flex flex-col items-center justify-center py-2.5 px-2 rounded-xl bg-surface-container-lowest hover:bg-surface-container text-on-surface border border-outline-variant/60 font-medium text-xs transition-all';
+          });
+          btn.className = 'pdp-size-btn flex flex-col items-center justify-center py-2.5 px-2 rounded-xl bg-surface-container-lowest ring-2 ring-primary text-primary font-bold text-xs shadow-sm transition-all';
+          currentSelectedSize = btn.getAttribute('data-size-val');
+          document.getElementById('sticky-selected-size-label').textContent = currentSelectedSize;
+        });
+      });
+
+      // 7. Add to Cart Actions
+      const addToCart = () => {
+        storeCart.addItem(product, currentSelectedSize, currentSelectedColor, 1);
+        openCartDrawer();
+      };
+
+      document.getElementById('pdp-add-to-cart-btn').addEventListener('click', addToCart);
+      document.getElementById('sticky-add-to-cart-btn').addEventListener('click', addToCart);
+
+      // 8. Wishlist Toggle
+      const wishlistBtn = document.getElementById('pdp-wishlist-btn');
+      if (storeWishlist.has(product.id)) {
+        wishlistBtn.querySelector('.material-symbols-outlined').style.fontVariationSettings = "'FILL' 1";
+        wishlistBtn.querySelector('.material-symbols-outlined').classList.add('text-error');
+      }
+      wishlistBtn.addEventListener('click', () => {
+        const isAdded = storeWishlist.toggle(product.id, product.title);
+        const icon = wishlistBtn.querySelector('.material-symbols-outlined');
+        if (isAdded) {
+          icon.style.fontVariationSettings = "'FILL' 1";
+          icon.classList.add('text-error');
+        } else {
+          icon.style.fontVariationSettings = "'FILL' 0";
+          icon.classList.remove('text-error');
+        }
+      });
+
+      // 9. Size Guide Modal
+      const sizeModal = document.getElementById('size-guide-modal');
+      const openSizeGuideBtn = document.getElementById('open-size-guide-btn');
+      const closeSizeGuideBtn = document.getElementById('size-guide-close-btn');
+      const sizeGuideBackdrop = document.getElementById('size-guide-backdrop');
+      const sizeGuideOkBtn = document.getElementById('size-guide-ok-btn');
+
+      const openSizeModal = () => sizeModal.classList.add('active');
+      const closeSizeModal = () => sizeModal.classList.remove('active');
+
+      if (openSizeGuideBtn) openSizeGuideBtn.addEventListener('click', openSizeModal);
+      if (closeSizeGuideBtn) closeSizeGuideBtn.addEventListener('click', closeSizeModal);
+      if (sizeGuideBackdrop) sizeGuideBackdrop.addEventListener('click', closeSizeModal);
+      if (sizeGuideOkBtn) sizeGuideOkBtn.addEventListener('click', closeSizeModal);
+    });
+  </script>
+</body>
+</html>

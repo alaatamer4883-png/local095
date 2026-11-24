@@ -1,0 +1,957 @@
+<!DOCTYPE html>
+<html dir="rtl" lang="ar">
+<head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+  <title>سيلين للأزياء | متجر الأزياء النسائية الفاخرة</title>
+  
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@300;400;500;600;700&family=Tajawal:wght@300;400;500;700&display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/>
+  
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            "surface": "#FAF9F6",
+            "surface-dim": "#EAE5DF",
+            "surface-container": "#F4F0EB",
+            "surface-container-low": "#F6F3EE",
+            "surface-container-high": "#EAE7E7",
+            "surface-container-highest": "#E5E2E1",
+            "surface-container-lowest": "#FFFFFF",
+            "on-surface": "#1A1A1A",
+            "on-surface-variant": "#5E584F",
+            "outline": "#807666",
+            "outline-variant": "#E5DFD7",
+            "primary": "#B38938",
+            "primary-container": "#956E1F",
+            "primary-fixed": "#FFDEA8",
+            "on-primary": "#FFFFFF",
+            "on-primary-container": "#FFFBFF",
+            "secondary-container": "#EAE5DF",
+            "on-secondary-container": "#4E4538",
+            "tertiary-fixed": "#FFDAD3",
+            "on-tertiary-fixed": "#7B3E35",
+            "error-container": "#FFDAD6",
+            "on-error-container": "#93000A",
+            "error": "#BA1A1A",
+            "inverse-surface": "#1A1A1A",
+            "inverse-on-surface": "#F3F0EF"
+          },
+          fontFamily: {
+            sans: ["'IBM Plex Sans Arabic'", "'Tajawal'", "sans-serif"],
+            serif: ["'Tajawal'", "serif"]
+          },
+          borderRadius: {
+            'sm': '8px',
+            'md': '12px',
+            'lg': '16px',
+            'xl': '24px'
+          }
+        }
+      }
+    }
+  </script>
+  
+  <!-- Custom CSS -->
+  <link rel="stylesheet" href="css/style.css"/>
+</head>
+<body class="bg-surface font-sans text-on-surface antialiased selection:bg-primary-fixed selection:text-on-surface">
+
+  <!-- ========================================================================= -->
+  <!-- SLIDE-OUT CART DRAWER                                                     -->
+  <!-- ========================================================================= -->
+  <div id="cart-drawer-backdrop" class="fixed inset-0 bg-inverse-surface/50 backdrop-blur-sm z-50 transition-opacity hidden"></div>
+  <aside id="cart-drawer-panel" class="fixed top-0 left-0 bottom-0 w-full sm:max-w-md bg-surface z-50 flex flex-col shadow-2xl">
+    <!-- Header -->
+    <div class="flex items-center justify-between px-6 py-4 bg-surface-container-low border-b border-outline-variant">
+      <div class="flex items-center gap-2">
+        <span class="material-symbols-outlined text-primary text-2xl">shopping_bag</span>
+        <h3 class="font-bold text-lg text-on-surface">حقيبة التسوق</h3>
+        <span id="cart-items-count-label" class="px-2.5 py-0.5 rounded-full bg-secondary-container text-on-secondary-container text-xs font-semibold">0 قطع</span>
+      </div>
+      <button id="cart-drawer-close-btn" class="p-1.5 rounded-lg text-on-surface-variant hover:text-on-surface hover:bg-surface-container transition-colors" aria-label="إغلاق">
+        <span class="material-symbols-outlined">close</span>
+      </button>
+    </div>
+
+    <!-- Free Shipping Progress Tracker -->
+    <div class="px-6 py-3.5 bg-surface-container-lowest border-b border-outline-variant/60">
+      <div class="flex justify-between items-center mb-1.5 text-xs text-on-surface-variant font-medium">
+        <span id="cart-shipping-text">متبقي 50 ر.س للحصول على شحن مجاني!</span>
+        <span id="cart-shipping-percent" class="font-bold text-primary">80%</span>
+      </div>
+      <div class="w-full bg-surface-container-high h-2 rounded-full overflow-hidden">
+        <div id="cart-shipping-bar" class="bg-primary h-full rounded-full transition-all duration-500" style="width: 80%;"></div>
+      </div>
+    </div>
+
+    <!-- Scrollable Items List -->
+    <div id="cart-drawer-items-list" class="flex-1 overflow-y-auto px-6 py-4 space-y-3.5">
+      <!-- Items dynamically populated via cart.js / main.js -->
+    </div>
+
+    <!-- Trust Microcopy -->
+    <div class="px-6 py-2.5 bg-surface-container-low text-center text-xs text-on-surface-variant font-medium border-t border-outline-variant/60">
+      صور حقيقية وخامات مختارة بعناية | استبدال واسترجاع بسهولة
+    </div>
+
+    <!-- Checkout Summary Box -->
+    <div class="px-6 py-5 bg-surface-container-lowest space-y-3 border-t border-outline-variant shadow-lg">
+      <div class="flex justify-between text-sm text-on-surface-variant">
+        <span>المجموع الفرعي:</span>
+        <span id="cart-subtotal" class="text-on-surface font-semibold">0 ر.س</span>
+      </div>
+      <div class="flex justify-between text-sm text-on-surface-variant">
+        <span>ضريبة القيمة المضافة (15%):</span>
+        <span id="cart-vat" class="text-on-surface font-semibold">0 ر.س</span>
+      </div>
+      <div class="flex justify-between text-base font-bold text-on-surface pt-2 border-t border-outline-variant/60">
+        <span>الإجمالي النهائي:</span>
+        <span id="cart-final-total" class="text-primary text-xl">0 ر.س</span>
+      </div>
+      <a href="checkout.html" class="w-full block text-center py-3.5 rounded-lg bg-primary text-on-primary font-bold text-sm hover:bg-primary-container transition-all shadow-md active:scale-98">
+        إتمام الطلب الآن
+      </a>
+    </div>
+  </aside>
+
+  <!-- ========================================================================= -->
+  <!-- MOBILE NAVIGATION DRAWER                                                  -->
+  <!-- ========================================================================= -->
+  <div id="mobile-nav-backdrop" class="fixed inset-0 bg-inverse-surface/50 backdrop-blur-sm z-50 transition-opacity hidden"></div>
+  <aside id="mobile-nav-drawer" class="fixed top-0 right-0 bottom-0 w-80 bg-surface z-50 flex flex-col shadow-2xl p-6">
+    <div class="flex items-center justify-between pb-4 border-b border-outline-variant">
+      <span class="font-bold text-xl text-primary font-serif">سيلين للأزياء</span>
+      <button id="mobile-nav-close-btn" class="p-1.5 rounded-lg text-on-surface-variant hover:text-on-surface hover:bg-surface-container transition-colors" aria-label="إغلاق">
+        <span class="material-symbols-outlined">close</span>
+      </button>
+    </div>
+    <nav class="flex flex-col gap-2 py-6 flex-1 text-right font-medium">
+      <a href="index.html" class="px-4 py-3 rounded-lg bg-primary-container text-on-primary-container font-semibold transition-colors flex items-center justify-between">
+        <span>الرئيسية</span>
+        <span class="material-symbols-outlined text-sm rtl:rotate-180">chevron_right</span>
+      </a>
+      <a href="category.html?cat=new" class="px-4 py-3 rounded-lg hover:bg-surface-container text-on-surface transition-colors flex items-center justify-between">
+        <span>وصل حديثاً</span>
+        <span class="material-symbols-outlined text-sm rtl:rotate-180">chevron_right</span>
+      </a>
+      <a href="category.html?cat=casual" class="px-4 py-3 rounded-lg hover:bg-surface-container text-on-surface transition-colors flex items-center justify-between">
+        <span>ملابس كاجوال</span>
+        <span class="material-symbols-outlined text-sm rtl:rotate-180">chevron_right</span>
+      </a>
+      <a href="category.html?cat=dresses" class="px-4 py-3 rounded-lg hover:bg-surface-container text-on-surface transition-colors flex items-center justify-between">
+        <span>فساتين ومناسبات</span>
+        <span class="material-symbols-outlined text-sm rtl:rotate-180">chevron_right</span>
+      </a>
+      <a href="category.html?cat=abayas" class="px-4 py-3 rounded-lg hover:bg-surface-container text-on-surface transition-colors flex items-center justify-between">
+        <span>عبايات ومحجبات</span>
+        <span class="material-symbols-outlined text-sm rtl:rotate-180">chevron_right</span>
+      </a>
+      <a href="about.html" class="px-4 py-3 rounded-lg hover:bg-surface-container text-on-surface transition-colors flex items-center justify-between">
+        <span>من نحن</span>
+        <span class="material-symbols-outlined text-sm rtl:rotate-180">chevron_right</span>
+      </a>
+    </nav>
+    <div class="pt-4 border-t border-outline-variant space-y-2">
+      <a href="checkout.html" class="w-full flex items-center justify-center gap-2 py-3 rounded-lg bg-primary text-on-primary font-semibold text-sm">
+        <span class="material-symbols-outlined text-lg">shopping_cart_checkout</span>
+        <span>صفحة الدفع السريع</span>
+      </a>
+    </div>
+  </aside>
+
+  <!-- ========================================================================= -->
+  <!-- SEARCH MODAL OVERLAY                                                      -->
+  <!-- ========================================================================= -->
+  <div id="search-modal" class="modal-overlay">
+    <div id="search-backdrop" class="fixed inset-0"></div>
+    <div class="modal-content p-6 z-10 max-w-xl">
+      <div class="flex items-center justify-between pb-3 border-b border-outline-variant">
+        <h3 class="font-bold text-lg text-on-surface">البحث في المتجر</h3>
+        <button id="search-close-btn" class="p-1 rounded-lg text-on-surface-variant hover:text-on-surface" aria-label="إغلاق">
+          <span class="material-symbols-outlined">close</span>
+        </button>
+      </div>
+      <div class="pt-4">
+        <div class="relative">
+          <input type="text" id="search-modal-input" placeholder="ابحثي عن فستان، عباية، طقم كاجوال..." class="w-full pr-11 pl-4 py-3 rounded-xl bg-surface-container border border-outline-variant focus:outline-none focus:border-primary text-sm"/>
+          <span class="material-symbols-outlined absolute right-3.5 top-3 text-outline">search</span>
+        </div>
+      </div>
+      <div id="search-modal-results" class="mt-4 max-h-80 overflow-y-auto divide-y divide-outline-variant/50">
+        <div class="py-8 text-center text-on-surface-variant font-medium text-sm">
+          اكتبي اسم القطعة، التصنيف أو المقاس للبحث السريع في تشكيلات سيلين...
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========================================================================= -->
+  <!-- TOP ANNOUNCEMENT BAR (Sticky)                                             -->
+  <!-- ========================================================================= -->
+  <div class="bg-surface-container-low text-center py-2 px-4 text-on-surface-variant text-xs sm:text-sm font-medium border-b border-outline-variant/60">
+    <span>توصيل سريع ومتابعة للطلب حتى يصلكِ | صور حقيقية وخامات مختارة بعناية</span>
+  </div>
+
+  <!-- ========================================================================= -->
+  <!-- STICKY NAVIGATION HEADER                                                  -->
+  <!-- ========================================================================= -->
+  <header class="sticky top-0 z-40 w-full glass-nav shadow-sm transition-all duration-300">
+    <div class="max-w-7xl mx-auto h-20 px-4 sm:px-6 lg:px-8 flex items-center justify-between">
+      
+      <!-- Brand Logo on the Right in RTL -->
+      <div class="flex items-center gap-3">
+        <button id="mobile-menu-toggle-btn" class="lg:hidden p-2 rounded-lg text-on-surface-variant hover:text-on-surface hover:bg-surface-container transition-colors" aria-label="القائمة">
+          <span class="material-symbols-outlined text-2xl">menu</span>
+        </button>
+        <a href="index.html" class="flex flex-col text-right">
+          <span class="font-serif text-2xl sm:text-3xl tracking-tight text-primary font-bold">سيلين للأزياء</span>
+          <span class="text-[10px] tracking-widest text-outline -mt-1 font-sans">CELINE COUTURE</span>
+        </a>
+      </div>
+
+      <!-- Center Navigation Links -->
+      <nav class="hidden lg:flex items-center gap-1.5 font-medium text-sm">
+        <a href="category.html?cat=new" data-path="new-arrivals" class="px-3.5 py-2 text-on-surface-variant hover:text-on-surface hover:bg-surface-container rounded-lg transition-colors">
+          وصل حديثاً
+        </a>
+        <a href="category.html?cat=casual" data-path="casual-wear" class="px-3.5 py-2 text-on-surface-variant hover:text-on-surface hover:bg-surface-container rounded-lg transition-colors">
+          ملابس كاجوال
+        </a>
+        <a href="category.html?cat=dresses" data-path="dresses-occasions" class="px-3.5 py-2 text-on-surface-variant hover:text-on-surface hover:bg-surface-container rounded-lg transition-colors">
+          فساتين ومناسبات
+        </a>
+        <a href="category.html?cat=abayas" data-path="abayas-modest" class="px-3.5 py-2 text-on-surface-variant hover:text-on-surface hover:bg-surface-container rounded-lg transition-colors">
+          عبايات ومحجبات
+        </a>
+        <a href="about.html" data-path="about-us" class="px-3.5 py-2 text-on-surface-variant hover:text-on-surface hover:bg-surface-container rounded-lg transition-colors">
+          من نحن
+        </a>
+      </nav>
+
+      <!-- Action Icons on the Left in RTL -->
+      <div class="flex items-center gap-1 sm:gap-2">
+        <!-- Search Trigger -->
+        <button data-action="open-search" class="p-2.5 text-on-surface-variant hover:text-on-surface hover:bg-surface-container rounded-full transition-colors" title="بحث">
+          <span class="material-symbols-outlined text-xl">search</span>
+        </button>
+
+        <!-- Wishlist -->
+        <a href="category.html?wishlist=true" class="relative p-2.5 text-on-surface-variant hover:text-on-surface hover:bg-surface-container rounded-full transition-colors" title="قائمة الأمنيات">
+          <span class="material-symbols-outlined text-xl">favorite</span>
+          <span class="header-wishlist-badge absolute top-1 left-1 w-4 h-4 rounded-full bg-primary text-white text-[10px] font-bold flex items-center justify-center">3</span>
+        </a>
+
+        <!-- Shopping Bag / Cart Drawer Trigger -->
+        <button data-action="open-cart" class="relative p-2.5 text-on-surface-variant hover:text-on-surface hover:bg-surface-container rounded-full transition-colors" title="حقيبة التسوق">
+          <span class="material-symbols-outlined text-xl">shopping_bag</span>
+          <span class="header-cart-badge absolute top-1 left-1 w-4 h-4 rounded-full bg-primary text-white text-[10px] font-bold flex items-center justify-center">2</span>
+        </button>
+
+        <!-- User Profile -->
+        <a href="about.html" class="p-1 text-on-surface-variant hover:text-on-surface mr-1" title="حسابي">
+          <img src="https://lh3.googleusercontent.com/aida/ALJJyrCHbungSpLphKdTtfYzqERsxo0es8I92Z9Sl-eCqzCICjJbESI6epOE9XxaLYy7i_s4H45nhBMttLKKMXuHETFNdfd0lE5K1dPHfnKYEmE0zuhvwf6iGRIwjG-5NzlO_idPIkG3waytJBZc3OWBQkEF44MusjYk6V_WUOGd7hrbPxcWsXV1Qd9YnZJL8fP7HH7RxD9IMN6knqHlWbggg7Hv3yIrwLrrxUlF6WZuVfFe" alt="Profile" class="w-8 h-8 rounded-full object-cover ring-1 ring-outline-variant"/>
+        </a>
+      </div>
+
+    </div>
+  </header>
+
+  <main class="flex-1 w-full">
+    
+    <!-- ========================================================================= -->
+    <!-- SECTION 1: HIGH-FASHION EDITORIAL LIFESTYLE HERO SECTION                  -->
+    <!-- ========================================================================= -->
+    <section class="relative w-full min-h-[85vh] flex items-center bg-surface overflow-hidden py-12 lg:py-20">
+      <!-- Ambient Glows -->
+      <div class="absolute top-1/4 -right-24 w-96 h-96 bg-primary-fixed/30 rounded-full blur-3xl pointer-events-none"></div>
+      <div class="absolute bottom-10 left-10 w-80 h-80 bg-tertiary-fixed/20 rounded-full blur-3xl pointer-events-none"></div>
+
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full grid grid-cols-1 lg:grid-cols-12 gap-12 items-center relative z-10">
+        
+        <!-- Typography & Primary CTA (Right in RTL) -->
+        <div class="lg:col-span-6 flex flex-col items-start space-y-6 text-right">
+          <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-secondary-container/80 text-on-surface-variant text-xs font-semibold">
+            <span class="w-2 h-2 rounded-full bg-primary animate-pulse"></span>
+            <span>مجموعة صيف وخريف ٢٠٢٥ الحصرية</span>
+          </div>
+
+          <h1 class="text-3xl sm:text-5xl lg:text-5xl font-light text-on-surface tracking-tight leading-[1.25]">
+            أهلاً بكِ في عالمكِ الخاص للأناقة... <br/>
+            <span class="text-primary font-serif font-bold italic">حيث تبدأ حكاية كل إطلالة.</span>
+          </h1>
+
+          <p class="text-base sm:text-lg text-on-surface-variant max-w-lg leading-relaxed font-normal">
+            تصاميم تليق بتفردكِ، وجودة تشعرين بها من اللمسة الأولى.
+          </p>
+
+          <div class="flex flex-wrap items-center gap-4 pt-2 w-full sm:w-auto">
+            <a href="category.html" class="btn-primary w-full sm:w-auto text-base py-3.5 px-8">
+              <span>تسوقي التشكيلة الآن</span>
+              <span class="material-symbols-outlined rtl:rotate-180">arrow_right_alt</span>
+            </a>
+            <a href="#categories" class="btn-secondary w-full sm:w-auto text-sm py-3.5 px-6">
+              <span>استكشفي المجموعات</span>
+              <span class="material-symbols-outlined text-sm rtl:rotate-180">north_west</span>
+            </a>
+          </div>
+
+          <!-- Social Proof Micro-metric -->
+          <div class="pt-4 flex items-center gap-4 border-t border-outline-variant/60 w-full sm:w-auto">
+            <div class="flex -space-x-2 space-x-reverse overflow-hidden">
+              <span class="inline-block h-8 w-8 rounded-full ring-2 ring-surface bg-primary text-white flex items-center justify-center text-xs font-bold">★</span>
+              <span class="inline-block h-8 w-8 rounded-full ring-2 ring-surface bg-surface-container flex items-center justify-center text-xs text-on-surface font-bold">٩٨٪</span>
+              <span class="inline-block h-8 w-8 rounded-full ring-2 ring-surface bg-primary-fixed flex items-center justify-center text-xs text-primary font-bold">١٥ك</span>
+            </div>
+            <p class="text-xs sm:text-sm text-on-surface-variant">
+              أكثر من <span class="font-bold text-on-surface">١٥,٠٠٠ سيدة</span> يثقن باختيارات سيلين
+            </p>
+          </div>
+        </div>
+
+        <!-- Hero Visual Editorial Image (Left in RTL) -->
+        <div class="lg:col-span-6 relative">
+          <div class="relative w-full aspect-[4/5] max-w-lg mx-auto rounded-2xl overflow-hidden shadow-2xl bg-surface-container group">
+            <img src="https://lh3.googleusercontent.com/aida-public/AB6AXuC2zp4R3fqjybkrHPOnB9wOxHDVsSvPArhFUdcq24XzaoBoxGOtD-JIyhzYepOO08naRqpsgnZNd2CurbuoJqdtBiz8CPoA0cKEGqROJWqtzf84evIBNF7ZJZGFhci_O4mvbWeYeovVMc-k_XAkI2loE95PPZd8hwSZeJEaoUK4Ad_-SPkw1jK8_BWFsRKjG5z1LFfPeu47Ot8y-a3GexEpPjBwRkJg5rRDLQaiceo" 
+                 alt="قفطان الحرير الإيطالي الممتاز" 
+                 class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"/>
+            <div class="absolute inset-0 bg-gradient-to-t from-inverse-surface/70 via-transparent to-transparent"></div>
+            
+            <!-- Floating Editorial Tag on Hero Image -->
+            <div class="absolute bottom-4 right-4 left-4 p-4 rounded-xl glass-card flex items-center justify-between shadow-lg">
+              <div class="flex flex-col text-right">
+                <span class="text-[11px] text-primary font-bold uppercase tracking-widest">إصدار استثنائي</span>
+                <a href="product.html?id=kaftan" class="font-bold text-sm sm:text-base text-on-surface hover:text-primary transition-colors">
+                  قفطان الحرير الإيطالي الممتاز
+                </a>
+              </div>
+              <a href="product.html?id=kaftan" class="text-sm font-bold text-primary px-3 py-1.5 rounded-lg bg-surface-container hover:bg-primary hover:text-white transition-all">
+                ٧٤٠ ر.س
+              </a>
+            </div>
+          </div>
+
+          <!-- Overlapping Seal Badge -->
+          <div class="hidden sm:flex absolute -bottom-5 -right-5 p-4 rounded-xl bg-surface-container-lowest shadow-xl items-center gap-3 border border-outline-variant/60 z-20">
+            <div class="w-10 h-10 rounded-full bg-primary-fixed flex items-center justify-center text-primary flex-shrink-0">
+              <span class="material-symbols-outlined text-xl">verified</span>
+            </div>
+            <div class="text-right">
+              <p class="text-xs font-bold text-on-surface">أقمشة طبيعية ١٠٠٪</p>
+              <p class="text-[11px] text-on-surface-variant">تطريز يدوي وحياكة راقية مخصصة</p>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ========================================================================= -->
+    <!-- SECTION 2: HORIZONTAL TRUST & VALUE STRIP (3 Columns)                     -->
+    <!-- ========================================================================= -->
+    <section class="w-full bg-[#F6F3EE] py-8 px-4 sm:px-6 lg:px-8 border-y border-outline-variant/60">
+      <div class="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-6">
+        
+        <!-- Trust 1 -->
+        <div class="flex items-center gap-4 p-3 rounded-xl bg-white/60 hover:bg-white transition-all shadow-sm">
+          <div class="w-13 h-13 p-3 rounded-xl bg-surface-container flex items-center justify-center text-primary flex-shrink-0">
+            <span class="material-symbols-outlined text-2xl">photo_camera</span>
+          </div>
+          <div class="text-right">
+            <h3 class="font-bold text-sm text-on-surface">صور حقيقية وخامات مختارة بعناية</h3>
+            <p class="text-xs text-on-surface-variant mt-0.5">ما ترينه هو تماماً ما يصل إلى باب بيتكِ</p>
+          </div>
+        </div>
+
+        <!-- Trust 2 -->
+        <div class="flex items-center gap-4 p-3 rounded-xl bg-white/60 hover:bg-white transition-all shadow-sm">
+          <div class="w-13 h-13 p-3 rounded-xl bg-surface-container flex items-center justify-center text-primary flex-shrink-0">
+            <span class="material-symbols-outlined text-2xl">published_with_changes</span>
+          </div>
+          <div class="text-right">
+            <h3 class="font-bold text-sm text-on-surface">إمكانية الاستبدال والاسترجاع بسهولة</h3>
+            <p class="text-xs text-on-surface-variant mt-0.5">خدمة سلسة وميسرة بدون أي تعقيد</p>
+          </div>
+        </div>
+
+        <!-- Trust 3 -->
+        <div class="flex items-center gap-4 p-3 rounded-xl bg-white/60 hover:bg-white transition-all shadow-sm">
+          <div class="w-13 h-13 p-3 rounded-xl bg-surface-container flex items-center justify-center text-primary flex-shrink-0">
+            <span class="material-symbols-outlined text-2xl">local_shipping</span>
+          </div>
+          <div class="text-right">
+            <h3 class="font-bold text-sm text-on-surface">توصيل سريع ومتابعة للطلب حتى يصلكِ</h3>
+            <p class="text-xs text-on-surface-variant mt-0.5">تغليف فاخر وشحن مخصص لكافة المدن</p>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ========================================================================= -->
+    <!-- SECTION 3: FEATURED CATEGORIES GRID (3 Visual Editorial Cards)            -->
+    <!-- ========================================================================= -->
+    <section id="categories" class="w-full py-16 px-4 sm:px-6 lg:px-8 bg-surface">
+      <div class="max-w-7xl mx-auto">
+        <div class="flex flex-col md:flex-row justify-between items-baseline mb-10 text-right gap-2">
+          <div>
+            <span class="text-xs font-bold text-primary tracking-wider uppercase">المجموعات الرئيسية</span>
+            <h2 class="text-2xl sm:text-3xl font-medium text-on-surface mt-1">تصفحي حسب ما يناسب يومكِ</h2>
+          </div>
+          <p class="text-sm text-on-surface-variant max-w-md">
+            تشكيلات مصممة لتواكب تفاصيل حياتكِ اليومية والمناسبات الخاصة بكل فخامة وبساطة.
+          </p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+          
+          <!-- Category 1: Casual -->
+          <a href="category.html?cat=casual" class="group relative rounded-2xl overflow-hidden aspect-[3/4] bg-surface-container flex flex-col justify-end p-6 shadow-sm hover:shadow-xl transition-all duration-500">
+            <img src="https://lh3.googleusercontent.com/aida-public/AB6AXuCta5ZjUGnYjgrDl9ezWri1dhlm4kt6-12ztgoMT4yJ-xzmbCAGBuUDiB9Y6v6Os6qktywodPypCGc9liDa6OjeLYjuLLoOW6XJR1zjnHrQ4A7eAFfen7VqxTBehni6SIBvnU95J8b9Y-UHAJjaASwyAPxgcj3wECg-HzCORV1d1aZ2xGlFEsd4U8ozD2wTfXcNYvjISZ9UqMJjhMi7HLPBWjONfw5NmgB-LGDRQY8" 
+                 alt="ملابس كاجوال ويومية" 
+                 class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"/>
+            <div class="absolute inset-0 bg-gradient-to-t from-inverse-surface/85 via-inverse-surface/25 to-transparent"></div>
+            <div class="relative z-10 flex flex-col text-right">
+              <div class="flex justify-between items-center mb-2">
+                <span class="px-3 py-1 rounded-full bg-white/20 backdrop-blur-md text-white text-xs">٤٢ قطعة جديدة</span>
+                <div class="w-8 h-8 rounded-full bg-white/20 backdrop-blur-md flex items-center justify-center text-white group-hover:bg-primary transition-colors">
+                  <span class="material-symbols-outlined text-sm rtl:rotate-180">arrow_forward</span>
+                </div>
+              </div>
+              <h3 class="text-xl font-bold text-white">ملابس كاجوال ويومية</h3>
+              <p class="text-xs text-white/80 mt-1">إطلالات ناعمة توفر أقصى درجات الراحة والأناقة اليومية</p>
+            </div>
+          </a>
+
+          <!-- Category 2: Evening Dresses -->
+          <a href="category.html?cat=dresses" class="group relative rounded-2xl overflow-hidden aspect-[3/4] bg-surface-container flex flex-col justify-end p-6 shadow-sm hover:shadow-xl transition-all duration-500">
+            <img src="https://lh3.googleusercontent.com/aida-public/AB6AXuB6MJAZe7YgvDBdt3WCMlB0FAPZ0iXTezcBjt_Klt6ukxi-Jg6UpukY2vUPtNIBNppLSEw2dCj_FY0mAZ10J42eZjlKnu6SyDK1KTV5Z56xUFartIXN0TSqpMxW_FydBXwcblEDDmAqpqU1Y-6IMj-6RqIsGF4oXJ9tUAhm3H_2KRflfnHSVPq9TmbrrnYDGXm8zkRj5FBjm70M4_knG6pkiDmAQ5GuLp25CvNytjQ" 
+                 alt="فساتين وقطع المناسبات" 
+                 class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"/>
+            <div class="absolute inset-0 bg-gradient-to-t from-inverse-surface/85 via-inverse-surface/25 to-transparent"></div>
+            <div class="relative z-10 flex flex-col text-right">
+              <div class="flex justify-between items-center mb-2">
+                <span class="px-3 py-1 rounded-full bg-white/20 backdrop-blur-md text-white text-xs">٢٨ تصميماً فريداً</span>
+                <div class="w-8 h-8 rounded-full bg-white/20 backdrop-blur-md flex items-center justify-center text-white group-hover:bg-primary transition-colors">
+                  <span class="material-symbols-outlined text-sm rtl:rotate-180">arrow_forward</span>
+                </div>
+              </div>
+              <h3 class="text-xl font-bold text-white">فساتين وقطع المناسبات</h3>
+              <p class="text-xs text-white/80 mt-1">فساتين سهرة وأعياد تنبض بالأنوثة والبريق الملكي</p>
+            </div>
+          </a>
+
+          <!-- Category 3: Abayas & Modest -->
+          <a href="category.html?cat=abayas" class="group relative rounded-2xl overflow-hidden aspect-[3/4] bg-surface-container flex flex-col justify-end p-6 shadow-sm hover:shadow-xl transition-all duration-500">
+            <img src="https://lh3.googleusercontent.com/aida-public/AB6AXuCKrULkSoKGeOj5P_kPGty9lqDOT6hjlzurOQ_fsoB-dpjH6PRJBvB1OWCJ9gFmxAVmAZAIL7djc_V0jhvEo9JLqoDtu5SenAsfnrFFXsg6nv6V5lLkDo-OgC-vAm4kVHqESfTkJC30771cnoJ05-MZqWWoBoxdjiZx9MHfGq7htIyuN2l-tgLMGsM3dIPiQ-SuUm_d_ImfHYavccnznJA1CqaOJhxPmVazF4vxtlY" 
+                 alt="عبايات وملابس محجبات" 
+                 class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"/>
+            <div class="absolute inset-0 bg-gradient-to-t from-inverse-surface/85 via-inverse-surface/25 to-transparent"></div>
+            <div class="relative z-10 flex flex-col text-right">
+              <div class="flex justify-between items-center mb-2">
+                <span class="px-3 py-1 rounded-full bg-white/20 backdrop-blur-md text-white text-xs">٣٥ عباية وتنسيق</span>
+                <div class="w-8 h-8 rounded-full bg-white/20 backdrop-blur-md flex items-center justify-center text-white group-hover:bg-primary transition-colors">
+                  <span class="material-symbols-outlined text-sm rtl:rotate-180">arrow_forward</span>
+                </div>
+              </div>
+              <h3 class="text-xl font-bold text-white">عبايات وملابس محجبات</h3>
+              <p class="text-xs text-white/80 mt-1">حشمة فاخرة بقصات حديثة تلائم المرأة المعاصرة</p>
+            </div>
+          </a>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- ========================================================================= -->
+    <!-- SECTION 4: BEST SELLERS & NEW ARRIVALS PRODUCT GRID (4 Columns)          -->
+    <!-- ========================================================================= -->
+    <section id="bestsellers" class="w-full py-16 px-4 sm:px-6 lg:px-8 bg-surface-container-low">
+      <div class="max-w-7xl mx-auto">
+        
+        <div class="flex flex-col md:flex-row md:items-end justify-between mb-10 text-right gap-4">
+          <div>
+            <span class="text-xs font-bold text-primary tracking-wider">الأكثر طلباً وإعجاباً</span>
+            <h2 class="text-2xl sm:text-3xl font-medium text-on-surface mt-1">مختارات هذا الأسبوع لكِ</h2>
+          </div>
+          <!-- Filter Tabs -->
+          <div class="flex flex-wrap gap-2 text-xs font-medium">
+            <a href="category.html" class="px-4 py-2 rounded-full bg-on-surface text-surface">الكل</a>
+            <a href="category.html?sort=bestseller" class="px-4 py-2 rounded-full bg-surface-container-highest text-on-surface-variant hover:text-on-surface transition-colors">الأكثر مبيعاً</a>
+            <a href="category.html?cat=new" class="px-4 py-2 rounded-full bg-surface-container-highest text-on-surface-variant hover:text-on-surface transition-colors">وصل حديثاً</a>
+            <a href="category.html?filter=sale" class="px-4 py-2 rounded-full bg-surface-container-highest text-on-surface-variant hover:text-on-surface transition-colors">عروض محدودة</a>
+          </div>
+        </div>
+
+        <!-- 4-Column Product Grid -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+
+          <!-- Card 1: Soft Cotton T-Shirt -->
+          <div class="product-card group bg-surface-container-lowest rounded-2xl p-3.5 flex flex-col justify-between shadow-sm border border-outline-variant/60">
+            <div>
+              <div class="relative aspect-[3/4] w-full rounded-xl overflow-hidden bg-surface-container">
+                <a href="product.html?id=tshirt" class="block w-full h-full">
+                  <img src="https://lh3.googleusercontent.com/aida-public/AB6AXuBxVD8GDbeucpEukypiNV3kqS4RSbaeP3M4bdIDjeJDaCZB6gFbznCVFMnFq9gkyOOcZmnbDZaGFaJZsb92JZcSeothOgkdBl89C_ur13rvs5dd_Dw_3r9iIkdot7ptGnizD4DKMqti_sb1KeijVA4PeIysB4mbUoTwdGKvY7gOdNufZ5_nwqFUDX2JS6fyvMZlSSx3_WayvvOSY4BrS5dwkUyNd2PeId3XXavn1Ms" 
+                       alt="تيشيرت قطني ناعم وفاخر" 
+                       class="product-card-img"/>
+                </a>
+                <span class="badge-scarcity absolute top-2.5 right-2.5">من أكثر القطع طلباً هذا الأسبوع</span>
+                <button data-wishlist-toggle="tshirt" aria-label="أضيفي للمفضلة" class="absolute top-2.5 left-2.5 w-8 h-8 rounded-full bg-surface-container-lowest/90 backdrop-blur-sm flex items-center justify-center text-on-surface-variant hover:text-error transition-colors">
+                  <span class="material-symbols-outlined text-lg">favorite</span>
+                </button>
+              </div>
+
+              <div class="pt-3 text-right space-y-1">
+                <!-- Color Swatches & Sizes -->
+                <div class="flex items-center justify-between py-1">
+                  <div class="flex items-center gap-1.5">
+                    <span class="w-3.5 h-3.5 rounded-full bg-[#FAF9F6] ring-1 ring-outline-variant" title="أوف وايت"></span>
+                    <span class="w-3.5 h-3.5 rounded-full bg-[#EAE5DF] ring-1 ring-outline-variant" title="بيج رملي"></span>
+                    <span class="w-3.5 h-3.5 rounded-full bg-[#1A1A1A] ring-1 ring-outline-variant" title="فحمي"></span>
+                  </div>
+                  <div class="flex items-center gap-1 text-[10px] text-on-surface-variant font-medium">
+                    <span class="px-1.5 py-0.5 rounded bg-surface-container">S</span>
+                    <span class="px-1.5 py-0.5 rounded bg-surface-container">M</span>
+                    <span class="px-1.5 py-0.5 rounded bg-surface-container">L</span>
+                    <span class="px-1.5 py-0.5 rounded bg-surface-container">XL</span>
+                  </div>
+                </div>
+
+                <a href="product.html?id=tshirt" class="font-bold text-sm text-on-surface hover:text-primary transition-colors block line-clamp-1">
+                  تيشيرت قطني ناعم وفاخر
+                </a>
+                <p class="text-xs text-on-surface-variant line-clamp-2 leading-relaxed">
+                  قطعة أساسية لا غنى عنها في خزانتكِ. خامة قطنية مريحة على البشرة، تحافظ على شكلها بعد الغسيل.
+                </p>
+
+                <div class="pt-1 flex items-baseline gap-2">
+                  <span class="text-base font-bold text-primary">١٨٥ ر.س</span>
+                  <span class="text-xs text-outline line-through">٢٢٠ ر.س</span>
+                </div>
+              </div>
+            </div>
+
+            <button data-quick-add="tshirt" class="w-full mt-4 py-2.5 rounded-lg bg-surface-container-high text-on-surface hover:bg-primary hover:text-white text-xs font-semibold transition-all flex items-center justify-center gap-1.5 shadow-sm">
+              <span class="material-symbols-outlined text-sm">shopping_bag</span>
+              <span>أضيفيها إلى حقيبتكِ</span>
+            </button>
+          </div>
+
+          <!-- Card 2: Practical Casual Set -->
+          <div class="product-card group bg-surface-container-lowest rounded-2xl p-3.5 flex flex-col justify-between shadow-sm border border-outline-variant/60">
+            <div>
+              <div class="relative aspect-[3/4] w-full rounded-xl overflow-hidden bg-surface-container">
+                <a href="product.html?id=casual-set" class="block w-full h-full">
+                  <img src="https://lh3.googleusercontent.com/aida-public/AB6AXuBEPKS5RQauB2psnbk4JjbLjOBCH1qGF3yJwJ78e3Ci-tFs1-REbLqpmFM4hTTEnK-FGzyYVxVJgaCUUThXRvVtjtc1Yr6ito5tE0RdpSmja5XJ7qY9NZI-8j_VYGJGywopsUn6kduNrma5dK35fD-l4uU58mQYBMX3FaQlPYCoeadfHMQOk9Xwn4zQvrb_KkKZrV7sAFI_cjzauJ4HhycQKbPtBEWAtCEd4iSyPbY" 
+                       alt="طقم كاجوال عصري وعملي" 
+                       class="product-card-img"/>
+                </a>
+                <span class="badge-scarcity absolute top-2.5 right-2.5">كمية محدودة</span>
+                <button data-wishlist-toggle="casual-set" aria-label="أضيفي للمفضلة" class="absolute top-2.5 left-2.5 w-8 h-8 rounded-full bg-surface-container-lowest/90 backdrop-blur-sm flex items-center justify-center text-on-surface-variant hover:text-error transition-colors">
+                  <span class="material-symbols-outlined text-lg">favorite</span>
+                </button>
+              </div>
+
+              <div class="pt-3 text-right space-y-1">
+                <div class="flex items-center justify-between py-1">
+                  <div class="flex items-center gap-1.5">
+                    <span class="w-3.5 h-3.5 rounded-full bg-[#E5DEC9] ring-1 ring-outline-variant"></span>
+                    <span class="w-3.5 h-3.5 rounded-full bg-[#6E5446] ring-1 ring-outline-variant"></span>
+                  </div>
+                  <div class="flex items-center gap-1 text-[10px] text-on-surface-variant font-medium">
+                    <span class="px-1.5 py-0.5 rounded bg-surface-container">S</span>
+                    <span class="px-1.5 py-0.5 rounded bg-surface-container">M</span>
+                    <span class="px-1.5 py-0.5 rounded bg-surface-container">L</span>
+                  </div>
+                </div>
+
+                <a href="product.html?id=casual-set" class="font-bold text-sm text-on-surface hover:text-primary transition-colors block line-clamp-1">
+                  طقم كاجوال عصري وعملي
+                </a>
+                <p class="text-xs text-on-surface-variant line-clamp-2 leading-relaxed">
+                  مصمم ليمنحكِ حرية الحركة وأناقة مرتبة في آنٍ واحد. مثالي للمشاوير السريعة والجامعة.
+                </p>
+
+                <div class="pt-1 flex items-baseline gap-2">
+                  <span class="text-base font-bold text-primary">٣٩٥ ر.س</span>
+                </div>
+              </div>
+            </div>
+
+            <button data-quick-add="casual-set" class="w-full mt-4 py-2.5 rounded-lg bg-surface-container-high text-on-surface hover:bg-primary hover:text-white text-xs font-semibold transition-all flex items-center justify-center gap-1.5 shadow-sm">
+              <span class="material-symbols-outlined text-sm">shopping_bag</span>
+              <span>أضيفيها إلى حقيبتكِ</span>
+            </button>
+          </div>
+
+          <!-- Card 3: Elegant Dress -->
+          <div class="product-card group bg-surface-container-lowest rounded-2xl p-3.5 flex flex-col justify-between shadow-sm border border-outline-variant/60">
+            <div>
+              <div class="relative aspect-[3/4] w-full rounded-xl overflow-hidden bg-surface-container">
+                <a href="product.html?id=dress" class="block w-full h-full">
+                  <img src="https://lh3.googleusercontent.com/aida-public/AB6AXuB-ftQbwZ0uwDHs4LDYbnG8tVME6QKYWWqbvBxO257BaZ5h1OTd3wZPp_4Qc1PM8InRWEL0WRSdlDJFQSllzqdzz02LVBawiih8Ua-oWJxwZ3b430Hr69v1R2nXtOhRHO6hs5-W_sjyxm--MQdJ_HkkQpiJrHxB2cSgD3cur3z0lwXHtEPNU9Fv4H8jC9Qww1yKK5tIm5NKfK3KN2JpfY67scx1cVe3_wwnEQ0hpnc" 
+                       alt="فستان سهرة انسيابي راقٍ" 
+                       class="product-card-img"/>
+                </a>
+                <span class="badge-new absolute top-2.5 right-2.5">جديد الموسم</span>
+                <button data-wishlist-toggle="dress" aria-label="أضيفي للمفضلة" class="absolute top-2.5 left-2.5 w-8 h-8 rounded-full bg-surface-container-lowest/90 backdrop-blur-sm flex items-center justify-center text-on-surface-variant hover:text-error transition-colors">
+                  <span class="material-symbols-outlined text-lg">favorite</span>
+                </button>
+              </div>
+
+              <div class="pt-3 text-right space-y-1">
+                <div class="flex items-center justify-between py-1">
+                  <div class="flex items-center gap-1.5">
+                    <span class="w-3.5 h-3.5 rounded-full bg-[#E5CF9F] ring-1 ring-outline-variant"></span>
+                    <span class="w-3.5 h-3.5 rounded-full bg-[#2C2B2A] ring-1 ring-outline-variant"></span>
+                    <span class="w-3.5 h-3.5 rounded-full bg-[#A36D61] ring-1 ring-outline-variant"></span>
+                  </div>
+                  <div class="flex items-center gap-1 text-[10px] text-on-surface-variant font-medium">
+                    <span class="px-1.5 py-0.5 rounded bg-surface-container">S</span>
+                    <span class="px-1.5 py-0.5 rounded bg-surface-container">M</span>
+                    <span class="px-1.5 py-0.5 rounded bg-surface-container">L</span>
+                    <span class="px-1.5 py-0.5 rounded bg-surface-container">XL</span>
+                  </div>
+                </div>
+
+                <a href="product.html?id=dress" class="font-bold text-sm text-on-surface hover:text-primary transition-colors block line-clamp-1">
+                  فستان سهرة انسيابي راقٍ
+                </a>
+                <p class="text-xs text-on-surface-variant line-clamp-2 leading-relaxed">
+                  بقصة مدروسة تبرز جمال الإطلالة بنعومة وانسيابية، مع تفاصيل راقية للمناسبات المميزة.
+                </p>
+
+                <div class="pt-1 flex items-baseline gap-2">
+                  <span class="text-base font-bold text-primary">٥٨٠ ر.س</span>
+                  <span class="text-xs text-outline line-through">٧٤٠ ر.س</span>
+                </div>
+              </div>
+            </div>
+
+            <button data-quick-add="dress" class="w-full mt-4 py-2.5 rounded-lg bg-surface-container-high text-on-surface hover:bg-primary hover:text-white text-xs font-semibold transition-all flex items-center justify-center gap-1.5 shadow-sm">
+              <span class="material-symbols-outlined text-sm">shopping_bag</span>
+              <span>أضيفيها إلى حقيبتكِ</span>
+            </button>
+          </div>
+
+          <!-- Card 4: Practical Stylish Abaya -->
+          <div class="product-card group bg-surface-container-lowest rounded-2xl p-3.5 flex flex-col justify-between shadow-sm border border-outline-variant/60">
+            <div>
+              <div class="relative aspect-[3/4] w-full rounded-xl overflow-hidden bg-surface-container">
+                <a href="product.html?id=abaya" class="block w-full h-full">
+                  <img src="https://lh3.googleusercontent.com/aida-public/AB6AXuB-pVoj_IpJqzlTYME_kLOI4lOlVMfRKa1JhCoZaOpH7tMiolIEPDxJyNFMsDtk1kSKLqQ1BJHsftTYr-KCLKu3kOhiQdIufEX1Bpmolq7pBfwdZAzbCAfQk-_vJoEvIMRfSAu62SvAlojvaJsVe6-RWxVZJEBFCy9cgGdpBMbHxp5ohzYl6hP3cWGTPSG55peqq5UhU5XqJcTABoJCdiAQtkpiLq9TWph_PFWSJBo" 
+                       alt="عباية يومية بأناقة محتشمة" 
+                       class="product-card-img"/>
+                </a>
+                <span class="badge-bestseller absolute top-2.5 right-2.5">الأكثر مبيعاً</span>
+                <button data-wishlist-toggle="abaya" aria-label="أضيفي للمفضلة" class="absolute top-2.5 left-2.5 w-8 h-8 rounded-full bg-surface-container-lowest/90 backdrop-blur-sm flex items-center justify-center text-on-surface-variant hover:text-error transition-colors">
+                  <span class="material-symbols-outlined text-lg">favorite</span>
+                </button>
+              </div>
+
+              <div class="pt-3 text-right space-y-1">
+                <div class="flex items-center justify-between py-1">
+                  <div class="flex items-center gap-1.5">
+                    <span class="w-3.5 h-3.5 rounded-full bg-[#1A1A1A] ring-1 ring-outline-variant"></span>
+                    <span class="w-3.5 h-3.5 rounded-full bg-[#424242] ring-1 ring-outline-variant"></span>
+                  </div>
+                  <div class="flex items-center gap-1 text-[10px] text-on-surface-variant font-medium">
+                    <span class="px-1.5 py-0.5 rounded bg-surface-container">52</span>
+                    <span class="px-1.5 py-0.5 rounded bg-surface-container">54</span>
+                    <span class="px-1.5 py-0.5 rounded bg-surface-container">56</span>
+                    <span class="px-1.5 py-0.5 rounded bg-surface-container">58</span>
+                  </div>
+                </div>
+
+                <a href="product.html?id=abaya" class="font-bold text-sm text-on-surface hover:text-primary transition-colors block line-clamp-1">
+                  عباية يومية بأناقة محتشمة
+                </a>
+                <p class="text-xs text-on-surface-variant line-clamp-2 leading-relaxed">
+                  تجمع بين الانسيابية والستر والذوق الهادئ، بخامة مريحة ومناسبة للاستخدام اليومي.
+                </p>
+
+                <div class="pt-1 flex items-baseline gap-2">
+                  <span class="text-base font-bold text-primary">٤٢٠ ر.س</span>
+                  <span class="text-xs text-outline line-through">٤٨٠ ر.س</span>
+                </div>
+              </div>
+            </div>
+
+            <button data-quick-add="abaya" class="w-full mt-4 py-2.5 rounded-lg bg-surface-container-high text-on-surface hover:bg-primary hover:text-white text-xs font-semibold transition-all flex items-center justify-center gap-1.5 shadow-sm">
+              <span class="material-symbols-outlined text-sm">shopping_bag</span>
+              <span>أضيفيها إلى حقيبتكِ</span>
+            </button>
+          </div>
+
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ========================================================================= -->
+    <!-- SECTION 5: BRAND STORY ASYMMETRIC SECTION ('من نحن')                      -->
+    <!-- ========================================================================= -->
+    <section class="w-full py-20 px-4 sm:px-6 lg:px-8 bg-surface relative overflow-hidden">
+      <div class="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+        
+        <!-- Asymmetric Visuals (Right in RTL) -->
+        <div class="lg:col-span-6 relative">
+          <div class="grid grid-cols-12 gap-4 items-end">
+            <div class="col-span-8 rounded-2xl overflow-hidden aspect-[4/5] bg-surface-container shadow-xl">
+              <img src="https://lh3.googleusercontent.com/aida-public/AB6AXuB-T25z3GeljudZbjnLj80scEIxn1TTAp0vcxblozGxQ3JGI0pCddQ8jSabGJnqmAmYKx_uOOrjhfjzHQf2aJt30H-GBPH4i5lqA5ZtY3xULWp85k2MwUqdkbKJeFqlYAiFGzzycIygiFICDgCZLJr5zApSi3SQrUQDBv6FRoUIzmy8mnFmbNJSCPSGLOY2hsYZAIgERp0fvT3pNpPAGADV-J-6Nf_D3yVX8WVzK9k" 
+                   alt="مشغل وتصميم أزياء سيلين" 
+                   class="w-full h-full object-cover"/>
+            </div>
+            <div class="col-span-4 rounded-xl overflow-hidden aspect-[3/4] bg-surface-container shadow-md -mb-6">
+              <img src="https://lh3.googleusercontent.com/aida-public/AB6AXuBNtZBzYWuakE6FMm5gfu_U45BG7EmZWBQd_HH69Zzj0PjdJc4CWsfV8jz7pGg0iVsV7e2qNM5Rbfe12rqhCfBUFibfk18g2lw2_ErXzCn23MxCv9aY3L_9ZXfSKL9rT4vRjmrulpmqN5HfbHaK-1ScNklE4SFvLJxOsOE49JzooDxEno8-tBB5JFywpRd1vA666nK9O8-tExGn-HLRxGAs1uO-j5NP27eR2rTOv5A" 
+                   alt="تفاصيل التطريز الدقيق" 
+                   class="w-full h-full object-cover"/>
+            </div>
+          </div>
+
+          <div class="absolute -top-4 right-4 p-3 rounded-full bg-primary-fixed text-on-surface shadow-lg flex items-center gap-2 pr-4 pl-3">
+            <span class="text-xs font-bold tracking-wider">دار تصميم أصيلة</span>
+            <span class="w-6 h-6 rounded-full bg-primary text-white flex items-center justify-center font-bold text-[10px]">١٠٠٪</span>
+          </div>
+        </div>
+
+        <!-- Narrative Copy (Left in RTL) -->
+        <div class="lg:col-span-6 flex flex-col text-right space-y-6">
+          <div class="inline-flex items-center gap-2 text-primary font-bold text-xs">
+            <span class="w-6 h-[1.5px] bg-primary"></span>
+            <span>من نحن — حكايتنا</span>
+          </div>
+
+          <h2 class="text-2xl sm:text-4xl font-light text-on-surface leading-snug">
+            حكايتنا... <span class="font-serif font-bold text-primary italic">شغف بالأناقة والراحة</span>
+          </h2>
+
+          <p class="text-base sm:text-lg text-on-surface-variant leading-relaxed">
+            بدأنا هذا المتجر من شغف حقيقي بالملابس المريحة التي تجمع بين الشكل الجميل والعملية في نفس الوقت. نؤمن أن اختيار ملابسكِ يجب أن يكون تجربة ممتعة وسهلة، لا مجرد بحث متعب.
+          </p>
+
+          <p class="text-sm sm:text-base text-on-surface-variant leading-relaxed">
+            لذلك ننتقي كل قطعة بعناية من حيث الخامة، القصة، والتفاصيل الصغيرة لتصلكِ قطعة تحبين ارتداءها مراراً وتكراراً.
+          </p>
+
+          <!-- Core Values -->
+          <div class="grid grid-cols-2 gap-3 pt-2">
+            <div class="flex items-center gap-2 text-xs font-semibold text-on-surface">
+              <span class="material-symbols-outlined text-primary text-base">done_all</span>
+              <span>خامات مسامية طبيعية</span>
+            </div>
+            <div class="flex items-center gap-2 text-xs font-semibold text-on-surface">
+              <span class="material-symbols-outlined text-primary text-base">done_all</span>
+              <span>مقاسات دقيقة ومدروسة</span>
+            </div>
+            <div class="flex items-center gap-2 text-xs font-semibold text-on-surface">
+              <span class="material-symbols-outlined text-primary text-base">done_all</span>
+              <span>حياكة متقنة وفاخرة</span>
+            </div>
+            <div class="flex items-center gap-2 text-xs font-semibold text-on-surface">
+              <span class="material-symbols-outlined text-primary text-base">done_all</span>
+              <span>خدمة استشارية على مدار الساعة</span>
+            </div>
+          </div>
+
+          <div class="pt-4 flex items-center justify-between border-t border-outline-variant/60">
+            <a href="about.html" class="btn-outline text-xs">
+              <span>اقرئي المزيد عن رحلتنا</span>
+              <span class="material-symbols-outlined text-sm rtl:rotate-180">arrow_right_alt</span>
+            </a>
+            <div class="font-serif italic text-primary text-xl tracking-wider select-none">
+              Céline Couture
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ========================================================================= -->
+    <!-- SECTION 6: SOCIAL PROOF & LOOKBOOK SECTION ('إطلالات ملهمة من عميلاتنا')  -->
+    <!-- ========================================================================= -->
+    <section class="w-full py-16 px-4 sm:px-6 lg:px-8 bg-surface-container-low border-t border-outline-variant/60">
+      <div class="max-w-6xl mx-auto flex flex-col items-center text-center mb-12 space-y-2">
+        <div class="flex items-center gap-1 text-primary">
+          <span class="material-symbols-outlined text-base fill">star</span>
+          <span class="material-symbols-outlined text-base fill">star</span>
+          <span class="material-symbols-outlined text-base fill">star</span>
+          <span class="material-symbols-outlined text-base fill">star</span>
+          <span class="material-symbols-outlined text-base fill">star</span>
+          <span class="text-xs font-bold text-on-surface mr-2">٤.٩ / ٥</span>
+        </div>
+        <h2 class="text-2xl sm:text-3xl font-medium text-on-surface">إطلالات ملهمة من عميلاتنا</h2>
+        <p class="text-sm text-on-surface-variant max-w-xl">
+          شاركينا صور تنسيقكِ لقطع سيلين على إنستغرام عبر الوسم <span class="text-primary font-bold">#سيلين_ستايل</span> لتنضمي إلى معرض الإلهام الأسبوعي.
+        </p>
+      </div>
+
+      <!-- 4-Square Lookbook Mosaic -->
+      <div class="max-w-6xl mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        
+        <!-- Lookbook 1 -->
+        <div class="relative group rounded-2xl overflow-hidden aspect-[4/5] bg-surface-container shadow-sm hover:shadow-xl transition-all">
+          <img src="https://lh3.googleusercontent.com/aida-public/AB6AXuBFwUd8MNXRHmF-_nHrHJDGw9BELoohsMI-8zrUrHkz5n7ij0_HbV4_DfLm9afNqriWfNk7qkDB7TroFEES6FTrniEMyc-ZRQ9pQ8ku3keaElg0RT5OvU2BIuReDuytjqglh5xZNR5xWAtR25Mhshf4vl0fMlJG6wxZUn_wvj9NNvX70rC2tp8LYTs2D8c67CDzvIoRMOsCDU799P-8amznkjjIPXlloFrY264b8AY" 
+               alt="إطلالة نورة الشمري" 
+               class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"/>
+          <div class="absolute inset-0 bg-gradient-to-t from-inverse-surface/85 via-transparent to-transparent"></div>
+          <div class="absolute bottom-4 right-4 left-4 text-right text-white">
+            <p class="font-bold text-sm">نورة الشمري</p>
+            <p class="text-xs text-white/80">"الخامة ناعمة وخفيفة جداً، طلبت لون ثاني فوراً!"</p>
+            <span class="inline-block mt-1 text-[10px] text-primary-fixed">#CelineStyle</span>
+          </div>
+        </div>
+
+        <!-- Lookbook 2 -->
+        <div class="relative group rounded-2xl overflow-hidden aspect-[4/5] bg-surface-container shadow-sm hover:shadow-xl transition-all">
+          <img src="https://lh3.googleusercontent.com/aida-public/AB6AXuCw-EolC7ozJfI11OSBF2hoGQOMsrefGtU-_8EZywi6c7Nb87PYK6lN3WaFMK0c7_IKwc_Jf6vZ9KmoqCn9uePMTUEgskyOfwKBEqIdBqieEkSjIWll8K36KMOiBpYIsDCO5jxXuvIfRDDx1DuVkiohUBxjPnW2BR7jQfLuArEcRbC1WGjkFjNB_QN_0J2PS0m3d9-7J1ircmct24pq_Pr9Em6GBPwvDzvpA9IqWs8" 
+               alt="إطلالة د. سارة العتيبي" 
+               class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"/>
+          <div class="absolute inset-0 bg-gradient-to-t from-inverse-surface/85 via-transparent to-transparent"></div>
+          <div class="absolute bottom-4 right-4 left-4 text-right text-white">
+            <p class="font-bold text-sm">د. سارة العتيبي</p>
+            <p class="text-xs text-white/80">"الفستان لفت كل الأنظار، القصة محبوكة بدقة خيالية."</p>
+            <span class="inline-block mt-1 text-[10px] text-primary-fixed">#فساتين_سيلين</span>
+          </div>
+        </div>
+
+        <!-- Lookbook 3 -->
+        <div class="relative group rounded-2xl overflow-hidden aspect-[4/5] bg-surface-container shadow-sm hover:shadow-xl transition-all">
+          <img src="https://lh3.googleusercontent.com/aida-public/AB6AXuBqZjDXgeUjjS0xq35m39fW4buY6LJYyW-BrxWTVFY_zZgti1Sfv4XrstQbGI-vNJACbt6Ig7mTL_Lj8I8jIdrmXyIpqa_FCbFYMu7uie7a60LwMkXOhy3SIulZItJlOPPCFi6f0DHroISLYyMZmH3vINWCQlMurDG3Sq_m2mCKYPNq8HOZVF4efE5N5-ZLDzQJQ1SGESrr_WiYYdpqoes9xzQOnPx1QtCuJ6WyzwE" 
+               alt="إطلالة مها المهيدب" 
+               class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"/>
+          <div class="absolute inset-0 bg-gradient-to-t from-inverse-surface/85 via-transparent to-transparent"></div>
+          <div class="absolute bottom-4 right-4 left-4 text-right text-white">
+            <p class="font-bold text-sm">مها المهيدب</p>
+            <p class="text-xs text-white/80">"أفضل عباية يومية اقتنيتها، ما تحتاج كوي كثير ومريحة جداً."</p>
+            <span class="inline-block mt-1 text-[10px] text-primary-fixed">#عبايات_رايقة</span>
+          </div>
+        </div>
+
+        <!-- Lookbook 4 -->
+        <div class="relative group rounded-2xl overflow-hidden aspect-[4/5] bg-surface-container shadow-sm hover:shadow-xl transition-all">
+          <img src="https://lh3.googleusercontent.com/aida-public/AB6AXuBdBF6TZMcXL5S6zqr91RgtGmGzaF4bLy93lk3YFbfIzY-6g4Yw8BRP_5OCamlLPuNsIOT-dXZit_Lp8jaOJyq0z209ZCAOoa2tAtaFI4s26pWsG_TPy8b3BckgwvkGr7OpZf5dPRV1HStFW0C24B4H8Z6oW0xOr8KIsY54ThPGQLQTzkae09Lj1fLoaox4IDl7llqamkdV7HKmYKJB1mz6-4h0fL7EiFuTk-WQjHc" 
+               alt="إطلالة ريما السعد" 
+               class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"/>
+          <div class="absolute inset-0 bg-gradient-to-t from-inverse-surface/85 via-transparent to-transparent"></div>
+          <div class="absolute bottom-4 right-4 left-4 text-right text-white">
+            <p class="font-bold text-sm">ريما السعد</p>
+            <p class="text-xs text-white/80">"التوصيل كان خلال يومين والتغليف فندقي كأنه هدية لنفسي."</p>
+            <span class="inline-block mt-1 text-[10px] text-primary-fixed">#سيلين_للأزياء</span>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Lookbook CTA Button -->
+      <div class="flex justify-center mt-10">
+        <a href="https://wa.me/966500000000?text=أود%20مشاركة%20إطلالتي%20مع%20سيلين" target="_blank" class="btn-secondary text-sm">
+          <span class="material-symbols-outlined text-base">photo_camera</span>
+          <span>شاركينا إطلالتكِ</span>
+        </a>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ========================================================================= -->
+  <!-- MULTI-COLUMN FOOTER                                                       -->
+  <!-- ========================================================================= -->
+  <footer class="w-full bg-surface-container-low pt-16 pb-12 border-t border-outline-variant/80">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
+      
+      <!-- WhatsApp Support Banner Card -->
+      <div class="p-6 sm:p-8 rounded-2xl bg-surface-container flex flex-col md:flex-row items-center justify-between gap-6 border border-outline-variant/60 shadow-sm">
+        <div class="flex items-center gap-4 text-right">
+          <div class="w-14 h-14 rounded-2xl bg-primary text-white flex items-center justify-center flex-shrink-0 shadow-md">
+            <span class="material-symbols-outlined text-3xl">chat</span>
+          </div>
+          <div>
+            <h4 class="font-bold text-base sm:text-lg text-on-surface">محتارة في المقاس أو التنسيق؟</h4>
+            <p class="text-xs sm:text-sm text-on-surface-variant mt-0.5">راسلينا وسنساعدكِ بكل سرور لاختيار المقاس المثالي وتنسيق قطعكِ</p>
+          </div>
+        </div>
+        <a href="https://wa.me/966500000000?text=مرحباً%20سيلين،%20أحتاج%20مساعدة%20في%20المقاس%20والتنسيق" target="_blank" class="btn-primary text-xs sm:text-sm whitespace-nowrap">
+          <span class="material-symbols-outlined text-lg">forum</span>
+          <span>محادثة واتساب مباشرة</span>
+        </a>
+      </div>
+
+      <!-- Links Grid -->
+      <div class="grid grid-cols-1 md:grid-cols-4 gap-8 text-right">
+        
+        <!-- Col 1: Bio -->
+        <div class="space-y-3">
+          <span class="font-serif text-2xl text-primary font-bold block">سيلين للأزياء</span>
+          <p class="text-xs sm:text-sm text-on-surface-variant leading-relaxed">
+            دار أزياء نسائية فاخرة تلتقي فيها الحداثة الباريسية مع الرقي الشرقي لتنسيق أرقى الإطلالات بجودة استثنائية وخامات أصيلة.
+          </p>
+        </div>
+
+        <!-- Col 2: Quick Links -->
+        <div class="space-y-3">
+          <h5 class="font-bold text-sm text-on-surface">روابط سريعة</h5>
+          <ul class="space-y-2 text-xs sm:text-sm text-on-surface-variant">
+            <li><a href="category.html?cat=new" class="hover:text-primary transition-colors">وصل حديثاً</a></li>
+            <li><a href="category.html?cat=casual" class="hover:text-primary transition-colors">ملابس كاجوال</a></li>
+            <li><a href="category.html?cat=dresses" class="hover:text-primary transition-colors">فساتين ومناسبات</a></li>
+            <li><a href="category.html?cat=abayas" class="hover:text-primary transition-colors">عبايات ومحجبات</a></li>
+            <li><a href="about.html" class="hover:text-primary transition-colors">من نحن</a></li>
+          </ul>
+        </div>
+
+        <!-- Col 3: Policies -->
+        <div class="space-y-3">
+          <h5 class="font-bold text-sm text-on-surface">السياسات والضمانات</h5>
+          <ul class="space-y-2 text-xs sm:text-sm text-on-surface-variant">
+            <li class="flex items-center gap-1.5"><span class="material-symbols-outlined text-primary text-base">verified</span><span>إمكانية الاستبدال والاسترجاع بسهولة</span></li>
+            <li class="flex items-center gap-1.5"><span class="material-symbols-outlined text-primary text-base">photo_camera</span><span>صور حقيقية وخامات مختارة</span></li>
+            <li class="flex items-center gap-1.5"><span class="material-symbols-outlined text-primary text-base">local_shipping</span><span>شحن سريع ومتابعة مستمرة</span></li>
+            <li class="flex items-center gap-1.5"><span class="material-symbols-outlined text-primary text-base">security</span><span>دفع إلكتروني آمن ١٠٠٪</span></li>
+          </ul>
+        </div>
+
+        <!-- Col 4: Payments -->
+        <div class="space-y-3">
+          <h5 class="font-bold text-sm text-on-surface">وسائل الدفع المعتمدة</h5>
+          <p class="text-xs sm:text-sm text-on-surface-variant">خيارات سداد مرنة وآمنة تلائم راحتكِ</p>
+          <div class="flex flex-wrap gap-2 pt-1">
+            <span class="px-2.5 py-1 rounded bg-surface-container font-semibold text-xs text-on-surface">مدى</span>
+            <span class="px-2.5 py-1 rounded bg-surface-container font-semibold text-xs text-on-surface">Visa</span>
+            <span class="px-2.5 py-1 rounded bg-surface-container font-semibold text-xs text-on-surface">Mastercard</span>
+            <span class="px-2.5 py-1 rounded bg-surface-container font-semibold text-xs text-on-surface">Apple Pay</span>
+            <span class="px-2.5 py-1 rounded bg-surface-container font-semibold text-xs text-on-surface">تابي (Tabby)</span>
+            <span class="px-2.5 py-1 rounded bg-surface-container font-semibold text-xs text-on-surface">تمارا (Tamara)</span>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Copyright -->
+      <div class="pt-6 border-t border-outline-variant/60 text-center text-xs text-on-surface-variant flex flex-col sm:flex-row items-center justify-between gap-2">
+        <p>© 2025 سيلين للأزياء. جميع الحقوق محفوظة.</p>
+        <a href="dashboard.html" class="inline-flex items-center gap-1 text-outline hover:text-primary transition-colors text-[11px] font-semibold">
+          <span class="material-symbols-outlined text-sm">dashboard</span>
+          <span>لوحة التحكم الرئيسية (Dashboard)</span>
+        </a>
+      </div>
+
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="js/products-data.js"></script>
+  <script src="js/cart.js"></script>
+  <script src="js/main.js"></script>
+  <script type="module" src="js/firebase-service.js"></script>
+</body>
+</html>

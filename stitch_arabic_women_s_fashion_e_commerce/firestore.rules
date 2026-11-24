@@ -1,0 +1,31 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Allow public read for products catalog
+    match /products/{productId} {
+      allow read: if true;
+      allow write: if true;
+    }
+    
+    // Allow creating orders from checkout
+    match /orders/{orderId} {
+      allow create: if true;
+      allow read, update: if true;
+    }
+    
+    // Allow carts and wishlists sync
+    match /carts/{userId} {
+      allow read, write: if true;
+    }
+    
+    match /wishlists/{userId} {
+      allow read, write: if true;
+    }
+    
+    // Inquiries
+    match /inquiries/{inquiryId} {
+      allow create: if true;
+      allow read: if true;
+    }
+  }
+}

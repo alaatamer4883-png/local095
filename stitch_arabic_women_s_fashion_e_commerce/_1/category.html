@@ -1,0 +1,466 @@
+<!DOCTYPE html>
+<html dir="rtl" lang="ar">
+<head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+  <title id="category-page-title">التشكيلة الكاملة | سيلين للأزياء</title>
+  
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@300;400;500;600;700&family=Tajawal:wght@300;400;500;700&display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/>
+  
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            "surface": "#FAF9F6",
+            "surface-dim": "#EAE5DF",
+            "surface-container": "#F4F0EB",
+            "surface-container-low": "#F6F3EE",
+            "surface-container-high": "#EAE7E7",
+            "surface-container-highest": "#E5E2E1",
+            "surface-container-lowest": "#FFFFFF",
+            "on-surface": "#1A1A1A",
+            "on-surface-variant": "#5E584F",
+            "outline": "#807666",
+            "outline-variant": "#E5DFD7",
+            "primary": "#B38938",
+            "primary-container": "#956E1F",
+            "primary-fixed": "#FFDEA8",
+            "on-primary": "#FFFFFF",
+            "on-primary-container": "#FFFBFF",
+            "secondary-container": "#EAE5DF",
+            "on-secondary-container": "#4E4538",
+            "tertiary-fixed": "#FFDAD3",
+            "on-tertiary-fixed": "#7B3E35",
+            "error-container": "#FFDAD6",
+            "on-error-container": "#93000A",
+            "error": "#BA1A1A",
+            "inverse-surface": "#1A1A1A",
+            "inverse-on-surface": "#F3F0EF"
+          },
+          fontFamily: {
+            sans: ["'IBM Plex Sans Arabic'", "'Tajawal'", "sans-serif"],
+            serif: ["'Tajawal'", "serif"]
+          },
+          borderRadius: {
+            'sm': '8px',
+            'md': '12px',
+            'lg': '16px',
+            'xl': '24px'
+          }
+        }
+      }
+    }
+  </script>
+  
+  <!-- Custom CSS -->
+  <link rel="stylesheet" href="css/style.css"/>
+</head>
+<body class="bg-surface font-sans text-on-surface antialiased selection:bg-primary-fixed selection:text-on-surface">
+
+  <!-- SLIDE-OUT CART DRAWER -->
+  <div id="cart-drawer-backdrop" class="fixed inset-0 bg-inverse-surface/50 backdrop-blur-sm z-50 transition-opacity hidden"></div>
+  <aside id="cart-drawer-panel" class="fixed top-0 left-0 bottom-0 w-full sm:max-w-md bg-surface z-50 flex flex-col shadow-2xl">
+    <div class="flex items-center justify-between px-6 py-4 bg-surface-container-low border-b border-outline-variant">
+      <div class="flex items-center gap-2">
+        <span class="material-symbols-outlined text-primary text-2xl">shopping_bag</span>
+        <h3 class="font-bold text-lg text-on-surface">حقيبة التسوق</h3>
+        <span id="cart-items-count-label" class="px-2.5 py-0.5 rounded-full bg-secondary-container text-on-secondary-container text-xs font-semibold">0 قطع</span>
+      </div>
+      <button id="cart-drawer-close-btn" class="p-1.5 rounded-lg text-on-surface-variant hover:text-on-surface hover:bg-surface-container transition-colors" aria-label="إغلاق">
+        <span class="material-symbols-outlined">close</span>
+      </button>
+    </div>
+
+    <div class="px-6 py-3.5 bg-surface-container-lowest border-b border-outline-variant/60">
+      <div class="flex justify-between items-center mb-1.5 text-xs text-on-surface-variant font-medium">
+        <span id="cart-shipping-text">متبقي 50 ر.س للحصول على شحن مجاني!</span>
+        <span id="cart-shipping-percent" class="font-bold text-primary">80%</span>
+      </div>
+      <div class="w-full bg-surface-container-high h-2 rounded-full overflow-hidden">
+        <div id="cart-shipping-bar" class="bg-primary h-full rounded-full transition-all duration-500" style="width: 80%;"></div>
+      </div>
+    </div>
+
+    <div id="cart-drawer-items-list" class="flex-1 overflow-y-auto px-6 py-4 space-y-3.5"></div>
+
+    <div class="px-6 py-2.5 bg-surface-container-low text-center text-xs text-on-surface-variant font-medium border-t border-outline-variant/60">
+      صور حقيقية وخامات مختارة بعناية | استبدال واسترجاع بسهولة
+    </div>
+
+    <div class="px-6 py-5 bg-surface-container-lowest space-y-3 border-t border-outline-variant shadow-lg">
+      <div class="flex justify-between text-sm text-on-surface-variant">
+        <span>المجموع الفرعي:</span>
+        <span id="cart-subtotal" class="text-on-surface font-semibold">0 ر.س</span>
+      </div>
+      <div class="flex justify-between text-sm text-on-surface-variant">
+        <span>ضريبة القيمة المضافة (15%):</span>
+        <span id="cart-vat" class="text-on-surface font-semibold">0 ر.س</span>
+      </div>
+      <div class="flex justify-between text-base font-bold text-on-surface pt-2 border-t border-outline-variant/60">
+        <span>الإجمالي النهائي:</span>
+        <span id="cart-final-total" class="text-primary text-xl">0 ر.س</span>
+      </div>
+      <a href="checkout.html" class="w-full block text-center py-3.5 rounded-lg bg-primary text-on-primary font-bold text-sm hover:bg-primary-container transition-all shadow-md active:scale-98">
+        إتمام الطلب الآن
+      </a>
+    </div>
+  </aside>
+
+  <!-- MOBILE NAVIGATION DRAWER -->
+  <div id="mobile-nav-backdrop" class="fixed inset-0 bg-inverse-surface/50 backdrop-blur-sm z-50 transition-opacity hidden"></div>
+  <aside id="mobile-nav-drawer" class="fixed top-0 right-0 bottom-0 w-80 bg-surface z-50 flex flex-col shadow-2xl p-6">
+    <div class="flex items-center justify-between pb-4 border-b border-outline-variant">
+      <span class="font-bold text-xl text-primary font-serif">سيلين للأزياء</span>
+      <button id="mobile-nav-close-btn" class="p-1.5 rounded-lg text-on-surface-variant hover:text-on-surface hover:bg-surface-container transition-colors" aria-label="إغلاق">
+        <span class="material-symbols-outlined">close</span>
+      </button>
+    </div>
+    <nav class="flex flex-col gap-2 py-6 flex-1 text-right font-medium">
+      <a href="index.html" class="px-4 py-3 rounded-lg hover:bg-surface-container text-on-surface transition-colors flex items-center justify-between">
+        <span>الرئيسية</span>
+        <span class="material-symbols-outlined text-sm rtl:rotate-180">chevron_right</span>
+      </a>
+      <a href="category.html?cat=new" class="px-4 py-3 rounded-lg hover:bg-surface-container text-on-surface transition-colors flex items-center justify-between">
+        <span>وصل حديثاً</span>
+        <span class="material-symbols-outlined text-sm rtl:rotate-180">chevron_right</span>
+      </a>
+      <a href="category.html?cat=casual" class="px-4 py-3 rounded-lg hover:bg-surface-container text-on-surface transition-colors flex items-center justify-between">
+        <span>ملابس كاجوال</span>
+        <span class="material-symbols-outlined text-sm rtl:rotate-180">chevron_right</span>
+      </a>
+      <a href="category.html?cat=dresses" class="px-4 py-3 rounded-lg hover:bg-surface-container text-on-surface transition-colors flex items-center justify-between">
+        <span>فساتين ومناسبات</span>
+        <span class="material-symbols-outlined text-sm rtl:rotate-180">chevron_right</span>
+      </a>
+      <a href="category.html?cat=abayas" class="px-4 py-3 rounded-lg hover:bg-surface-container text-on-surface transition-colors flex items-center justify-between">
+        <span>عبايات ومحجبات</span>
+        <span class="material-symbols-outlined text-sm rtl:rotate-180">chevron_right</span>
+      </a>
+      <a href="about.html" class="px-4 py-3 rounded-lg hover:bg-surface-container text-on-surface transition-colors flex items-center justify-between">
+        <span>من نحن</span>
+        <span class="material-symbols-outlined text-sm rtl:rotate-180">chevron_right</span>
+      </a>
+    </nav>
+  </aside>
+
+  <!-- SEARCH MODAL OVERLAY -->
+  <div id="search-modal" class="modal-overlay">
+    <div id="search-backdrop" class="fixed inset-0"></div>
+    <div class="modal-content p-6 z-10 max-w-xl">
+      <div class="flex items-center justify-between pb-3 border-b border-outline-variant">
+        <h3 class="font-bold text-lg text-on-surface">البحث في المتجر</h3>
+        <button id="search-close-btn" class="p-1 rounded-lg text-on-surface-variant hover:text-on-surface" aria-label="إغلاق">
+          <span class="material-symbols-outlined">close</span>
+        </button>
+      </div>
+      <div class="pt-4">
+        <div class="relative">
+          <input type="text" id="search-modal-input" placeholder="ابحثي عن فستان، عباية، طقم كاجوال..." class="w-full pr-11 pl-4 py-3 rounded-xl bg-surface-container border border-outline-variant focus:outline-none focus:border-primary text-sm"/>
+          <span class="material-symbols-outlined absolute right-3.5 top-3 text-outline">search</span>
+        </div>
+      </div>
+      <div id="search-modal-results" class="mt-4 max-h-80 overflow-y-auto divide-y divide-outline-variant/50"></div>
+    </div>
+  </div>
+
+  <!-- TOP ANNOUNCEMENT BAR -->
+  <div class="bg-surface-container-low text-center py-2 px-4 text-on-surface-variant text-xs sm:text-sm font-medium border-b border-outline-variant/60">
+    <span>توصيل سريع ومتابعة للطلب حتى يصلكِ | صور حقيقية وخامات مختارة بعناية</span>
+  </div>
+
+  <!-- STICKY NAVIGATION HEADER -->
+  <header class="sticky top-0 z-40 w-full glass-nav shadow-sm transition-all duration-300">
+    <div class="max-w-7xl mx-auto h-20 px-4 sm:px-6 lg:px-8 flex items-center justify-between">
+      
+      <div class="flex items-center gap-3">
+        <button id="mobile-menu-toggle-btn" class="lg:hidden p-2 rounded-lg text-on-surface-variant hover:text-on-surface hover:bg-surface-container transition-colors" aria-label="القائمة">
+          <span class="material-symbols-outlined text-2xl">menu</span>
+        </button>
+        <a href="index.html" class="flex flex-col text-right">
+          <span class="font-serif text-2xl sm:text-3xl tracking-tight text-primary font-bold">سيلين للأزياء</span>
+          <span class="text-[10px] tracking-widest text-outline -mt-1 font-sans">CELINE COUTURE</span>
+        </a>
+      </div>
+
+      <nav class="hidden lg:flex items-center gap-1.5 font-medium text-sm">
+        <a href="category.html?cat=new" data-path="new-arrivals" class="px-3.5 py-2 text-on-surface-variant hover:text-on-surface hover:bg-surface-container rounded-lg transition-colors">
+          وصل حديثاً
+        </a>
+        <a href="category.html?cat=casual" data-path="casual-wear" class="px-3.5 py-2 text-on-surface-variant hover:text-on-surface hover:bg-surface-container rounded-lg transition-colors">
+          ملابس كاجوال
+        </a>
+        <a href="category.html?cat=dresses" data-path="dresses-occasions" class="px-3.5 py-2 text-on-surface-variant hover:text-on-surface hover:bg-surface-container rounded-lg transition-colors">
+          فساتين ومناسبات
+        </a>
+        <a href="category.html?cat=abayas" data-path="abayas-modest" class="px-3.5 py-2 text-on-surface-variant hover:text-on-surface hover:bg-surface-container rounded-lg transition-colors">
+          عبايات ومحجبات
+        </a>
+        <a href="about.html" data-path="about-us" class="px-3.5 py-2 text-on-surface-variant hover:text-on-surface hover:bg-surface-container rounded-lg transition-colors">
+          من نحن
+        </a>
+      </nav>
+
+      <div class="flex items-center gap-1 sm:gap-2">
+        <button data-action="open-search" class="p-2.5 text-on-surface-variant hover:text-on-surface hover:bg-surface-container rounded-full transition-colors" title="بحث">
+          <span class="material-symbols-outlined text-xl">search</span>
+        </button>
+        <a href="category.html?wishlist=true" class="relative p-2.5 text-on-surface-variant hover:text-on-surface hover:bg-surface-container rounded-full transition-colors" title="قائمة الأمنيات">
+          <span class="material-symbols-outlined text-xl">favorite</span>
+          <span class="header-wishlist-badge absolute top-1 left-1 w-4 h-4 rounded-full bg-primary text-white text-[10px] font-bold flex items-center justify-center">3</span>
+        </a>
+        <button data-action="open-cart" class="relative p-2.5 text-on-surface-variant hover:text-on-surface hover:bg-surface-container rounded-full transition-colors" title="حقيبة التسوق">
+          <span class="material-symbols-outlined text-xl">shopping_bag</span>
+          <span class="header-cart-badge absolute top-1 left-1 w-4 h-4 rounded-full bg-primary text-white text-[10px] font-bold flex items-center justify-center">2</span>
+        </button>
+        <a href="about.html" class="p-1 text-on-surface-variant hover:text-on-surface mr-1" title="حسابي">
+          <img src="https://lh3.googleusercontent.com/aida/ALJJyrCHbungSpLphKdTtfYzqERsxo0es8I92Z9Sl-eCqzCICjJbESI6epOE9XxaLYy7i_s4H45nhBMttLKKMXuHETFNdfd0lE5K1dPHfnKYEmE0zuhvwf6iGRIwjG-5NzlO_idPIkG3waytJBZc3OWBQkEF44MusjYk6V_WUOGd7hrbPxcWsXV1Qd9YnZJL8fP7HH7RxD9IMN6knqHlWbggg7Hv3yIrwLrrxUlF6WZuVfFe" alt="Profile" class="w-8 h-8 rounded-full object-cover ring-1 ring-outline-variant"/>
+        </a>
+      </div>
+
+    </div>
+  </header>
+
+  <main class="w-full flex-1 pb-16">
+    
+    <!-- Category Hero Banner -->
+    <section class="bg-surface-container-low py-10 px-4 sm:px-6 lg:px-8 border-b border-outline-variant/60 text-right">
+      <div class="max-w-7xl mx-auto space-y-2">
+        <div class="flex items-center gap-2 text-primary font-bold text-xs">
+          <a href="index.html" class="hover:underline">الرئيسية</a>
+          <span class="material-symbols-outlined text-xs rtl:rotate-180">chevron_left</span>
+          <span id="category-breadcrumb-label">التشكيلة الكاملة</span>
+        </div>
+        <h1 id="category-title" class="text-3xl sm:text-4xl font-light text-on-surface">
+          استكشفي أرقى <span class="text-primary font-serif font-bold italic">التصاميم المختارة</span>
+        </h1>
+        <p id="category-subtitle" class="text-sm text-on-surface-variant max-w-xl leading-relaxed">
+          ننتقي كل قطعة بعناية فائقة لتلائم ذوقكِ الرفيع، مع ضمان الجودة، والقصة المدروسة وخامات تدوم طويلاً.
+        </p>
+      </div>
+    </section>
+
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      
+      <!-- Filter & Tab Controls -->
+      <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 pb-6 border-b border-outline-variant/60">
+        
+        <!-- Category Navigation Chips -->
+        <div class="flex flex-wrap gap-2 text-xs font-semibold" id="category-nav-chips">
+          <a href="category.html" class="cat-chip px-4 py-2 rounded-full border transition-all" data-slug="all">الكل</a>
+          <a href="category.html?cat=new" class="cat-chip px-4 py-2 rounded-full border transition-all" data-slug="new">وصل حديثاً</a>
+          <a href="category.html?cat=casual" class="cat-chip px-4 py-2 rounded-full border transition-all" data-slug="casual">ملابس كاجوال</a>
+          <a href="category.html?cat=dresses" class="cat-chip px-4 py-2 rounded-full border transition-all" data-slug="dresses">فساتين ومناسبات</a>
+          <a href="category.html?cat=abayas" class="cat-chip px-4 py-2 rounded-full border transition-all" data-slug="abayas">عبايات ومحجبات</a>
+          <a href="category.html?cat=accessories" class="cat-chip px-4 py-2 rounded-full border transition-all" data-slug="accessories">إكسسوارات</a>
+        </div>
+
+        <!-- Sort Select & Product Count -->
+        <div class="flex items-center justify-between md:justify-end gap-3 text-xs">
+          <span id="products-count-badge" class="text-on-surface-variant font-medium">عرض ٨ قطع</span>
+          <div class="flex items-center gap-2">
+            <span class="text-outline font-medium">ترتيب حسب:</span>
+            <select id="sort-select" class="px-3 py-1.5 rounded-lg bg-surface-container border border-outline-variant focus:outline-none focus:border-primary text-on-surface font-medium">
+              <option value="featured">الأكثر طلباً</option>
+              <option value="price-asc">السعر: من الأقل للأعلى</option>
+              <option value="price-desc">السعر: من الأعلى للأقل</option>
+              <option value="rating">التقييم الأعلى</option>
+            </select>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Products Grid -->
+      <div id="category-products-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 pt-8">
+        <!-- Injected via JS -->
+      </div>
+
+    </div>
+
+  </main>
+
+  <!-- MULTI-COLUMN FOOTER -->
+  <footer class="w-full bg-surface-container-low pt-16 pb-12 border-t border-outline-variant/80">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
+      <div class="p-6 sm:p-8 rounded-2xl bg-surface-container flex flex-col md:flex-row items-center justify-between gap-6 border border-outline-variant/60 shadow-sm">
+        <div class="flex items-center gap-4 text-right">
+          <div class="w-14 h-14 rounded-2xl bg-primary text-white flex items-center justify-center flex-shrink-0 shadow-md">
+            <span class="material-symbols-outlined text-3xl">chat</span>
+          </div>
+          <div>
+            <h4 class="font-bold text-base sm:text-lg text-on-surface">محتارة في المقاس أو التنسيق؟</h4>
+            <p class="text-xs sm:text-sm text-on-surface-variant mt-0.5">راسلينا وسنساعدكِ بكل سرور لاختيار المقاس المثالي وتنسيق قطعكِ</p>
+          </div>
+        </div>
+        <a href="https://wa.me/966500000000" target="_blank" class="btn-primary text-xs sm:text-sm whitespace-nowrap">
+          <span class="material-symbols-outlined text-lg">forum</span>
+          <span>محادثة واتساب مباشرة</span>
+        </a>
+      </div>
+      <div class="pt-6 border-t border-outline-variant/60 text-center text-xs text-on-surface-variant">
+        <p>© 2025 سيلين للأزياء. جميع الحقوق محفوظة.</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="js/products-data.js"></script>
+  <script src="js/cart.js"></script>
+  <script src="js/main.js"></script>
+  <script type="module" src="js/firebase-service.js"></script>
+
+  <!-- Category Page Dynamic Script -->
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const urlParams = new URLSearchParams(window.location.search);
+      const catSlug = urlParams.get('cat') || 'all';
+      const isWishlist = urlParams.get('wishlist') === 'true';
+
+      const pageTitle = document.getElementById('category-page-title');
+      const breadcrumbLabel = document.getElementById('category-breadcrumb-label');
+      const categoryTitle = document.getElementById('category-title');
+      const categorySubtitle = document.getElementById('category-subtitle');
+      const grid = document.getElementById('category-products-grid');
+      const countBadge = document.getElementById('products-count-badge');
+      const sortSelect = document.getElementById('sort-select');
+
+      // Set active chip styling
+      const chips = document.querySelectorAll('.cat-chip');
+      chips.forEach(chip => {
+        const slug = chip.getAttribute('data-slug');
+        if (!isWishlist && slug === catSlug) {
+          chip.className = 'cat-chip px-4 py-2 rounded-full bg-on-surface text-surface font-semibold shadow-sm';
+        } else {
+          chip.className = 'cat-chip px-4 py-2 rounded-full bg-surface-container text-on-surface-variant hover:text-on-surface border border-outline-variant/60 transition-colors';
+        }
+      });
+
+      // Filter products
+      let filteredProducts = [...STORE_PRODUCTS];
+
+      if (isWishlist) {
+        pageTitle.textContent = 'قائمة أمنياتي | سيلين للأزياء';
+        breadcrumbLabel.textContent = 'قائمة الأمنيات';
+        categoryTitle.innerHTML = 'قطعكِ <span class="text-primary font-serif font-bold italic">المفضلة والمختارة</span>';
+        categorySubtitle.textContent = 'القطع التي نالت إعجابكِ، احفظيها لطلبها متى ما رغبتِ أو أضيفيها إلى حقيبتكِ مباشرة.';
+        filteredProducts = STORE_PRODUCTS.filter(p => storeWishlist.has(p.id));
+      } else if (catSlug === 'new') {
+        pageTitle.textContent = 'وصل حديثاً | سيلين للأزياء';
+        breadcrumbLabel.textContent = 'وصل حديثاً';
+        categoryTitle.innerHTML = 'تشكيلة <span class="text-primary font-serif font-bold italic">الموسم الجديدة</span>';
+        categorySubtitle.textContent = 'أحدث إصدارات دور الأزياء العالمية بلمسات سيلين الراقية والفريدة.';
+        filteredProducts = STORE_PRODUCTS.filter(p => p.isNew);
+      } else if (catSlug === 'casual') {
+        pageTitle.textContent = 'ملابس كاجوال ويومية | سيلين للأزياء';
+        breadcrumbLabel.textContent = 'ملابس كاجوال';
+        categoryTitle.innerHTML = 'أناقة يومية <span class="text-primary font-serif font-bold italic">مريحة وعملية</span>';
+        categorySubtitle.textContent = 'قطع أساسية وأطقم ناعمة تمنحكِ الراحة والثقة طوال اليوم.';
+        filteredProducts = STORE_PRODUCTS.filter(p => p.categorySlug === 'casual');
+      } else if (catSlug === 'dresses') {
+        pageTitle.textContent = 'فساتين وقطع المناسبات | سيلين للأزياء';
+        breadcrumbLabel.textContent = 'فساتين ومناسبات';
+        categoryTitle.innerHTML = 'فساتين سهرة <span class="text-primary font-serif font-bold italic">بإطلالة ملكية</span>';
+        categorySubtitle.textContent = 'تصاميم آسرة من الحرير والأقمشة الملكية لأمسيات لا تُنسى.';
+        filteredProducts = STORE_PRODUCTS.filter(p => p.categorySlug === 'dresses');
+      } else if (catSlug === 'abayas') {
+        pageTitle.textContent = 'عبايات وملابس محجبات | سيلين للأزياء';
+        breadcrumbLabel.textContent = 'عبايات ومحجبات';
+        categoryTitle.innerHTML = 'عبايات راقية <span class="text-primary font-serif font-bold italic">بقصات محتشمة ومعاصرة</span>';
+        categorySubtitle.textContent = 'كريب ملكي وتطريزات هادئة تلائم تفاصيل حياتكِ اليومية والمناسبات.';
+        filteredProducts = STORE_PRODUCTS.filter(p => p.categorySlug === 'abayas');
+      } else if (catSlug === 'accessories') {
+        pageTitle.textContent = 'الإكسسوارات والحقائب | سيلين للأزياء';
+        breadcrumbLabel.textContent = 'إكسسوارات';
+        categoryTitle.innerHTML = 'لمسات تكميلية <span class="text-primary font-serif font-bold italic">تتوج إطلالتكِ</span>';
+        categorySubtitle.textContent = 'مجوهرات باروكية راقية وحقائب سهرة ميتاليك تضفي بريقاً خاصاً.';
+        filteredProducts = STORE_PRODUCTS.filter(p => p.categorySlug === 'accessories');
+      }
+
+      function renderGrid() {
+        // Sort products
+        const sortVal = sortSelect.value;
+        if (sortVal === 'price-asc') {
+          filteredProducts.sort((a, b) => a.price - b.price);
+        } else if (sortVal === 'price-desc') {
+          filteredProducts.sort((a, b) => b.price - a.price);
+        } else if (sortVal === 'rating') {
+          filteredProducts.sort((a, b) => b.rating - a.rating);
+        }
+
+        countBadge.textContent = `عرض ${filteredProducts.length} قطع`;
+
+        if (filteredProducts.length === 0) {
+          grid.innerHTML = `
+            <div class="col-span-full py-20 text-center text-on-surface-variant">
+              <span class="material-symbols-outlined text-6xl text-outline mb-3">sentiment_dissatisfied</span>
+              <h3 class="font-bold text-lg text-on-surface">لا توجد قطع مطابقة حالياً</h3>
+              <p class="text-xs mt-1 mb-6">استكشفي التصنيفات الأخرى للاطلاع على أحدث التشكيلات.</p>
+              <a href="category.html" class="btn-primary text-xs">عرض كل القطع</a>
+            </div>
+          `;
+          return;
+        }
+
+        grid.innerHTML = filteredProducts.map(p => `
+          <div class="product-card group bg-surface-container-lowest rounded-2xl p-3.5 flex flex-col justify-between shadow-sm border border-outline-variant/60">
+            <div>
+              <div class="relative aspect-[3/4] w-full rounded-xl overflow-hidden bg-surface-container">
+                <a href="product.html?id=${p.id}" class="block w-full h-full">
+                  <img src="${p.image}" alt="${p.title}" class="product-card-img"/>
+                </a>
+                ${p.badge ? `<span class="badge-scarcity absolute top-2.5 right-2.5">${p.badge}</span>` : ''}
+                <button data-wishlist-toggle="${p.id}" aria-label="أضيفي للمفضلة" class="absolute top-2.5 left-2.5 w-8 h-8 rounded-full bg-surface-container-lowest/90 backdrop-blur-sm flex items-center justify-center text-on-surface-variant hover:text-error transition-colors">
+                  <span class="material-symbols-outlined text-lg ${storeWishlist.has(p.id) ? 'fill text-error' : ''}">favorite</span>
+                </button>
+              </div>
+
+              <div class="pt-3 text-right space-y-1">
+                <div class="flex items-center justify-between py-1">
+                  <div class="flex items-center gap-1.5">
+                    ${p.colors.slice(0, 3).map(c => `
+                      <span class="w-3.5 h-3.5 rounded-full ring-1 ring-outline-variant" style="background-color: ${c.hex};" title="${c.name}"></span>
+                    `).join('')}
+                  </div>
+                  <div class="flex items-center gap-1 text-[10px] text-on-surface-variant font-medium">
+                    ${p.sizes.slice(0, 4).map(s => `
+                      <span class="px-1.5 py-0.5 rounded bg-surface-container">${s}</span>
+                    `).join('')}
+                  </div>
+                </div>
+
+                <a href="product.html?id=${p.id}" class="font-bold text-sm text-on-surface hover:text-primary transition-colors block line-clamp-1">
+                  ${p.title}
+                </a>
+                <p class="text-xs text-on-surface-variant line-clamp-2 leading-relaxed">
+                  ${p.description}
+                </p>
+
+                <div class="pt-1 flex items-baseline gap-2">
+                  <span class="text-base font-bold text-primary">${p.price} ر.س</span>
+                  ${p.originalPrice ? `<span class="text-xs text-outline line-through">${p.originalPrice} ر.س</span>` : ''}
+                </div>
+              </div>
+            </div>
+
+            <button data-quick-add="${p.id}" class="w-full mt-4 py-2.5 rounded-lg bg-surface-container-high text-on-surface hover:bg-primary hover:text-white text-xs font-semibold transition-all flex items-center justify-center gap-1.5 shadow-sm">
+              <span class="material-symbols-outlined text-sm">shopping_bag</span>
+              <span>أضيفيها إلى حقيبتكِ</span>
+            </button>
+          </div>
+        `).join('');
+      }
+
+      sortSelect.addEventListener('change', renderGrid);
+      renderGrid();
+    });
+  </script>
+</body>
+</html>
